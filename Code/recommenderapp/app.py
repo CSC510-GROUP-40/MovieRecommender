@@ -10,6 +10,9 @@
 #     https://opensource.org/licenses/MIT
 
 
+from search import Search
+from filter import Filter
+import os
 from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
@@ -24,15 +27,30 @@ from datetime import datetime
 from tmdb_utils import get_movie_reviews, get_streaming_providers, search_movie_tmdb
 import re
 import pandas as pd
-
+from dotenv import load_dotenv
+from oauthlib.oauth2 import WebApplicationClient
 sys.path.append("../../")
-from filter import Filter
-from search import Search
 from Code.prediction_scripts.item_based import recommendForNewUser
+
+
+load_dotenv()
+
 
 app = Flask(__name__)
 app.secret_key = "secret key"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+
+
+# Google OAuth Configuration
+app.config['GOOGLE_CLIENT_ID'] = os.environ.get("GOOGLE_CLIENT_ID", None)
+app.config['GOOGLE_CLIENT_SECRET'] = os.environ.get("GOOGLE_CLIENT_SECRET", None)
+app.config['GOOGLE_DISCOVERY_URL'] = os.environ.get("GOOGLE_DISCOVERY_URL", None)
+app.config['GOOGLE_SIGN_IN_REDIRECT_URI'] = os.environ.get("GOOGLE_SIGN_IN_REDIRECT_URI", None)
+
+
+# OAuth Client Setup
+oauthclient = WebApplicationClient(app.config['GOOGLE_CLIENT_ID'])
+app.oauthclient = oauthclient
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 db = SQLAlchemy(app)
@@ -41,6 +59,12 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+
+def get_google_provider_cfg():
+    '''
+    get the google oauth provider url
+    '''
+    return requests.get(app.config['GOOGLE_DISCOVERY_URL']).json()
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -194,6 +218,24 @@ def login():
     # If we reach this point without returning, 'user' was not assigned due to a POST
     # Or there was an error in login, handle accordingly
     return render_template('login.html', error=error)
+
+
+@app.route("/google-login")
+def google_login():
+    '''
+    provides sign in with google
+    '''
+    # get the url to hit for google login
+    google_provider_cfg = get_google_provider_cfg()
+    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+
+    # construct request for google login and specify the fields on the account
+    request_uri = app.oauthclient.prepare_request_uri(
+        authorization_endpoint,
+        redirect_uri=app.config['GOOGLE_SIGN_IN_REDIRECT_URI'],
+        scope=["openid", "email", "profile"],
+    )
+    return redirect(request_uri)
 
 
 @app.route('/logout')
