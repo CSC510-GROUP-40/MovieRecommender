@@ -10,8 +10,10 @@
 #     https://opensource.org/licenses/MIT
 
 
+
 from search import Search
 from filter import Filter
+import logging
 import os
 from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 from flask_cors import CORS, cross_origin
@@ -29,11 +31,12 @@ import re
 import pandas as pd
 from dotenv import load_dotenv
 from oauthlib.oauth2 import WebApplicationClient
-sys.path.append("../../")
-from Code.prediction_scripts.item_based import recommendForNewUser
-
-
+# sys.path.append("../../")
+from prediction_scripts.item_based import recommendForNewUser
 load_dotenv()
+LOGGER = logging.getLogger(__name__)
+
+
 
 
 app = Flask(__name__)
@@ -51,6 +54,8 @@ app.config['GOOGLE_SIGN_IN_REDIRECT_URI'] = os.environ.get("GOOGLE_SIGN_IN_REDIR
 # OAuth Client Setup
 oauthclient = WebApplicationClient(app.config['GOOGLE_CLIENT_ID'])
 app.oauthclient = oauthclient
+
+
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 db = SQLAlchemy(app)
@@ -197,6 +202,76 @@ def register():
     return render_template('register.html', error=error)
 
 
+@app.route("/login/callback", methods=['GET'])
+def google_loign_callback():
+    '''
+    handle callback data from google oauth and login user
+    '''
+
+    try:
+        # Get authorization code from url returned by google
+        code = request.args.get("code")
+        google_provider_cfg = get_google_provider_cfg()
+        token_endpoint = google_provider_cfg["token_endpoint"]
+        LOGGER.info("something of me")
+        token_url, headers, body = app.oauthclient.prepare_token_request(
+            token_endpoint,
+            authorization_response=request.url,
+            redirect_url=request.base_url,
+            code=code,
+        )
+        token_response = requests.post(
+            token_url,
+            headers=headers,
+            data=body,
+            auth=(app.config['GOOGLE_CLIENT_ID'],
+                  app.config['GOOGLE_CLIENT_SECRET'],
+                  ),
+        )
+
+        app.oauthclient.parse_request_body_response(
+            json.dumps(token_response.json()))
+
+        userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
+        uri, headers, body = app.oauthclient.add_token(userinfo_endpoint)
+        userinfo_response = requests.get(uri, headers=headers, data=body)
+        LOGGER.error("okay of me to es")
+        if userinfo_response.json().get("email_verified"):
+            unique_id = userinfo_response.json()["sub"]
+            user_email = userinfo_response.json()["email"]
+            picture = userinfo_response.json()["picture"]
+            username = userinfo_response.json()["given_name"]
+
+            existing_user = User.query.filter_by(email=user_email).first()
+
+            if existing_user:
+                login_user(existing_user)
+                return redirect(url_for('landing_page'))
+
+            else:
+                # If username and email are not taken, proceed with registration
+                user = User(username=username, email=user_email)
+                user.set_password("")
+                db.session.add(user)
+                db.session.commit()
+
+                # Automatically log in the user after registration
+                login_user(user)
+                return redirect(url_for('landing_page'))
+
+        else:
+            LOGGER.info("email not verified")
+            error = "User email not available or not verified by Google."  # , 400
+        return render_template('login.html', error=error)
+    except Exception as e:
+        LOGGER.error(f"error occured {e}")
+        return render_template('login.html', error="an error occured please try again later")
+
+
+
+
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -218,6 +293,7 @@ def login():
     # If we reach this point without returning, 'user' was not assigned due to a POST
     # Or there was an error in login, handle accordingly
     return render_template('login.html', error=error)
+
 
 
 @app.route("/google-login")
