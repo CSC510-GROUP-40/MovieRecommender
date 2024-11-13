@@ -32,7 +32,9 @@ Are you spending more time picking a movie than actually watching one? Let Strea
   - [Tech Stack 👨‍💻](#tech-stack-)
   - [Setup and Installation ⚙️](#setup-and-installation-️)
     - [Install Dependencies](#install-dependencies)
+      - [Create Google Client Credentials](#create-google-client-credentials)
   - [Getting Started](#getting-started)
+      - [GOOGLE CHROME SETTINGS FOR SSL](#google-chrome-settings-for-ssl)
     - [Running Tests](#running-tests)
   - [Documentation 📚](#documentation-)
   - [Found a Bug? 🐛](#found-a-bug-)
@@ -117,16 +119,36 @@ After cloning, install dependencies with:
 ```bash
 pip install -r requirements.txt
 ```
+#### Create Google Client Credentials
+- First, note that you will need a Google Account. You already have one if you use Gmail.
 
+- Go to the [Google developers credentials page](https://console.developers.google.com/apis/credentials).
+
+- Once in, you may be prompted to agree to their terms of service. Should you agree to those, press the Create credentials button on the next page. Select the option for OAuth client ID:
+![Google Credentials Page](docs/google_crendentials.jpg)
+- Select the Web application option at the top. You can provide a name for the client in the Name field as well. The name you provide will be displayed to users when they are consenting to your application acting on their behalf.
+
+- if you’ll be running your web application locally for now, so you can set the Authorized JavaScript origins to https://127.0.0.1:5000 and Authorized redirect URIs to https://127.0.0.1:5000/login/callback. This will allow your local Flask application to communicate with Google.
+
+- Finally, hit Create and take note of the client ID and client secret. You’ll need both later. You may also download the config file as json and update you `.env` file with the required fields
 ## Getting Started
-1. `cd Code/recommenderapp`
-2. Run the application with:
+1. Create a `.env` file in the root folder and paste the content as found in `.env.example`. Populate the fields with your own credentials
+2. `cd Code/recommenderapp`
+3. Run the application with:
    ```bash
    python -m flask run --debug
    ```
-3. Visit `http://127.0.0.1:5000/` in your browser to start exploring!
-4. To test the google sign in feature run the app with `python -m flask run --debug --cert=adhoc` and visit the app on `https://127.0.0.1:5000/`
-   
+4. Visit `http://127.0.0.1:5000/` in your browser to start exploring!
+5. To test the google sign in feature run the app with `python -m flask run --debug --cert=adhoc` and visit the app on `https://127.0.0.1:5000/`
+
+#### GOOGLE CHROME SETTINGS FOR SSL
+for ssl to work locally on google chrome, you will have to do the following settings within your chrome browser.
+- open this URL on chrome chrome://flags/#allow-insecure-localhost
+- set the Allow invalid certificates for resources loaded from localhost. and enable this by clicking on relaunch at the bottom right. see image below
+![Google settings for SSL](docs/chrome.png)
+- note that this settings is not required for firefox 
+  
+  
 ### Running Tests
 1. Make sure pytest is installed on your system.
 2. switch to the tests directortory: `cd MovieRecommender/Code/tests`.
