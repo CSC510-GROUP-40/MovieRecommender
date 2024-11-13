@@ -383,7 +383,7 @@ def history():
         user_id=current_user.id).all()
     if not recommendations:
         # Passing a flag to indicate no recommendations found
-        return render_template('history.html', recommendations=None)
+        return render_template('history.html', recommendations=[])
     return render_template('history.html', recommendations=recommendations)
 
 
