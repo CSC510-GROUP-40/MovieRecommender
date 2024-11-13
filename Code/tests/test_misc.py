@@ -1,4 +1,6 @@
-from Code.prediction_scripts.item_based import recommendForNewUser
+import sys
+sys.path.append('../recommenderapp')
+from recommenderapp.prediction_scripts.item_based import recommendForNewUser
 import unittest
 import warnings
 import sys

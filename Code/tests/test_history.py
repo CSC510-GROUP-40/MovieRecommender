@@ -1,7 +1,10 @@
 import unittest
-from Code.recommenderapp.app import app, db, User, Recommendation
 from flask_login import login_user
 from datetime import datetime
+import sys
+sys.path.append('../recommenderapp')
+
+from recommenderapp.app import app, db, User, Recommendation
 
 
 class HistoryTests(unittest.TestCase):
@@ -77,7 +80,3 @@ class HistoryTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Inception', response.data)
         self.assertIn(b'The Matrix', response.data)
-
-
-if __name__ == "__main__":
-    unittest.main()

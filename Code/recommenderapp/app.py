@@ -11,8 +11,7 @@
 
 
 
-from search import Search
-from filter import Filter
+
 import logging
 import os
 from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
@@ -26,13 +25,16 @@ import csv
 import time
 import requests
 from datetime import datetime
-from tmdb_utils import get_movie_reviews, get_streaming_providers, search_movie_tmdb
+
 import re
 import pandas as pd
 from dotenv import load_dotenv
 from oauthlib.oauth2 import WebApplicationClient
 # sys.path.append("../../")
 from prediction_scripts.item_based import recommendForNewUser
+from prediction_scripts.search import Search
+from prediction_scripts.filter import Filter
+from prediction_scripts.tmdb_utils import get_movie_reviews, get_streaming_providers, search_movie_tmdb
 load_dotenv()
 LOGGER = logging.getLogger(__name__)
 

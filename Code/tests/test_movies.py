@@ -1,5 +1,7 @@
 import unittest
-from Code.prediction_scripts.item_based import recommendForNewUser
+import sys
+sys.path.append('../recommenderapp')
+from recommenderapp.prediction_scripts.item_based import recommendForNewUser
 import os
 import pandas as pd
 project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

@@ -1,7 +1,9 @@
 import unittest
 from unittest.mock import patch
 from flask import jsonify
-from Code.recommenderapp.app import app, db, User
+import sys
+sys.path.append('../recommenderapp')
+from recommenderapp.app import app, db, User
 
 
 class ProfileTests(unittest.TestCase):
@@ -78,7 +80,7 @@ class ProfileTests(unittest.TestCase):
 
             # Attempt to change the password to a new valid password
             self.app.post('/change_password', data=dict(new_password="new_password"), follow_redirects=True)
-            
+
             # Verify that the password was actually changed
             with app.app_context():
                 user = User.query.filter_by(username="testuser").first()
@@ -95,12 +97,11 @@ class ProfileTests(unittest.TestCase):
 
             # Attempt to change the password to an empty string
             self.app.post('/change_password', data=dict(new_password=""), follow_redirects=True)
-            
+
             # Verify that the password was not changed to an empty password
             with app.app_context():
                 user = User.query.filter_by(username="testuser").first()
                 self.assertTrue(user.check_password("testpassword"), "Expected password to remain unchanged")
-
 
     def test_retrieve_profile_data(self):
         """Test retrieving profile data for a user.
