@@ -132,8 +132,9 @@ pip install -r requirements.txt
 
 - Finally, hit Create and take note of the client ID and client secret. You’ll need both later. You may also download the config file as json and update you `.env` file with the required fields
 ## Getting Started
-1. Create a `.env` file in the root folder and paste the content as found in `.env.example`. Populate the fields with your own credentials
-2. `cd Code/recommenderapp`
+1. Run this command `cd Code/recommenderapp`
+2. Create a `.env` file inside `Code/recommenderapp`  and paste the content as found in `.env.example`. Populate the fields with your own credentials
+
 3. Run the application with:
    ```bash
    python -m flask run --debug
