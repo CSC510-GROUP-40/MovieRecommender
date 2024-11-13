@@ -33,6 +33,7 @@ Are you spending more time picking a movie than actually watching one? Let Strea
   - [Setup and Installation ⚙️](#setup-and-installation-️)
     - [Install Dependencies](#install-dependencies)
   - [Getting Started](#getting-started)
+    - [Running Tests](#running-tests)
   - [Documentation 📚](#documentation-)
   - [Found a Bug? 🐛](#found-a-bug-)
   - [License 📃](#license-)
@@ -126,7 +127,11 @@ pip install -r requirements.txt
 3. Visit `http://127.0.0.1:5000/` in your browser to start exploring!
 4. To test the google sign in feature run the app with `python -m flask run --debug --cert=adhoc` and visit the app on `https://127.0.0.1:5000/`
    
-   
+### Running Tests
+1. Make sure pytest is installed on your system.
+2. switch to the tests directortory: `cd MovieRecommender/Code/tests`.
+3. Run the tests with `pytest`
+
 ![Starting App](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXhqdHRreDQ5NGd2MmY3NjB5dGhlbjNuNWU0MXlib3Q4bXp3eGxzayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2IudUHdI075HL02Pkk/giphy.gif)
 
 ## Documentation 📚
