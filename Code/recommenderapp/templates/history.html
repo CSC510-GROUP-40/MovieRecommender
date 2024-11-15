@@ -48,20 +48,30 @@
 
         <!-- Recommendation List -->
         <div class="row">
-            {% for i in range(0, recommendations|length, 10) %}
+            {% if recommendations %}
+        {% for i in range(0, recommendations|length, 10) %}
             <div class="col-md-12">
                 <div class="card" style="background-color: #888888; color: white; margin-bottom: 20px; padding: 20px; border-radius: 10px;">
                     <h3 style="color: white;">Recommendation - {{ loop.index }}</h3>
                     <ul style="list-style-type: none; padding-left: 0;">
                         {% for rec in recommendations[i:i+10] %}
-                        <li style="color:#faf9fa; font-size: 18px; margin-bottom: 10px;">
-                            {{ rec.movie_title }} - Recommended on: {{ rec.recommended_on }}
-                        </li>
+                            <li style="color:#faf9fa; font-size: 18px; margin-bottom: 10px;">
+                                {{ rec.movie_title }} - Recommended on: {{ rec.recommended_on }}
+                            </li>
                         {% endfor %}
                     </ul>
                 </div>
             </div>
-            {% endfor %}
+        {% endfor %}
+        {% else %}
+            <div class="col-md-12">
+                <div class="card" style="background-color: #888888; color: white; margin-bottom: 20px; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: white;">No Recommendations Available</h3>
+                    <p style="color:#faf9fa; font-size: 18px;">You have no recommendations at this time.</p>
+                </div>
+            </div>
+        {% endif %}
+
         </div>
     </div>
 

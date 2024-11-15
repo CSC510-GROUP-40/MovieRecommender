@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import patch
-from Code.recommenderapp.tmdb_utils import search_movie_tmdb, get_streaming_providers, get_movie_reviews
+import sys
+sys.path.append('../recommenderapp')
+from recommenderapp.prediction_scripts.tmdb_utils import search_movie_tmdb, get_streaming_providers, get_movie_reviews
 
 
 class TestTMDBFunctions(unittest.TestCase):

@@ -1,5 +1,7 @@
 import unittest
-from Code.prediction_scripts.item_based import recommendForNewUser
+import sys
+sys.path.append('../recommenderapp')
+from recommenderapp.prediction_scripts.item_based import recommendForNewUser
 import os
 import pandas as pd
 project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -239,7 +241,7 @@ class RecommendationTests(unittest.TestCase):
         """Test recommendation with a large list of movies, testing scalability."""
 
         # Load movies.csv and select the first 100 titles
-        movies_df = pd.read_csv(os.path.join(project_dir, "data/movies.csv"))
+        movies_df = pd.read_csv(os.path.join(project_dir, "recommenderapp/prediction_scripts/data/movies.csv"))
         movies = [
             {"title": f"{title} (2021)", "rating": 5.0}
             for title in movies_df["title"].head(100)

@@ -33,8 +33,9 @@ def recommendForNewUser(user_rating):
         return []
 
     # Load ratings and movies data
-    ratings = pd.read_csv(project_dir + "/data/ratings.csv")
-    movies = pd.read_csv(project_dir + "/data/movies.csv")
+    ratings = pd.read_csv(project_dir + "/recommenderapp/prediction_scripts/data/ratings.csv")
+    movies = pd.read_csv(project_dir + "/recommenderapp/prediction_scripts/data/movies.csv")
+
     user = pd.DataFrame(valid_user_ratings)
 
     # Standardize titles in user and movies data

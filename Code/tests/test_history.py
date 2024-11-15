@@ -1,7 +1,10 @@
 import unittest
-from Code.recommenderapp.app import app, db, User, Recommendation
 from flask_login import login_user
 from datetime import datetime
+import sys
+sys.path.append('../recommenderapp')
+
+from recommenderapp.app import app, db, User, Recommendation
 
 
 class HistoryTests(unittest.TestCase):
@@ -35,10 +38,14 @@ class HistoryTests(unittest.TestCase):
 
     def test_view_empty_history(self):
         """Test viewing an empty recommendation history."""
-        self.login_user()
+        #self.login_user()
+        self.app.post('/login', data=dict(
+            username="testuser",
+            password="password"
+        ), follow_redirects=True)
         response = self.app.get('/history', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'No recommendations found', response.data)
+        self.assertIn(b'No Recommendations Available', response.data)
 
     def test_view_nonempty_history(self):
         """Test viewing a non-empty recommendation history."""
@@ -77,7 +84,3 @@ class HistoryTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Inception', response.data)
         self.assertIn(b'The Matrix', response.data)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -22,17 +22,24 @@ Are you spending more time picking a movie than actually watching one? Let Strea
 
 # <b>Table of Contents</b>
 
-- [Overview](#overview-%EF%B8%8F)
-- [Exciting Future Plans](#exciting-future-plans-%F0%9F%94%AE)
-- [Demo Video](#demo-video-%EF%B8%8F)
-- [How StreamR Works](#how-streamr-works-)
-- [Tech Stack](#tech-stack-)
-- [Setup and Installation](#setup-and-installation-%EF%B8%8F)
-- [Getting Started](#getting-started)
-- [Documentation](#documentation-%EF%B8%8F)
-- [Join the Conversation](#join-the-conversation-)
-- [Found a Bug?](#found-a-bug-)
-- [License](#license-%F0%9F%93%83)
+- [StreamR 🍿](#streamr-)
+  - [Skip the endless scroll, StreamR has your next movie pick ready!](#skip-the-endless-scroll-streamr-has-your-next-movie-pick-ready)
+- [Table of Contents](#table-of-contents)
+  - [Overview 👁️](#overview-️)
+  - [Exciting Future Plans 🔮](#exciting-future-plans-)
+  - [Demo Video ▶️](#demo-video-️)
+  - [How StreamR Works 📱](#how-streamr-works-)
+  - [Tech Stack 👨‍💻](#tech-stack-)
+  - [Setup and Installation ⚙️](#setup-and-installation-️)
+    - [Install Dependencies](#install-dependencies)
+      - [Create Google Client Credentials](#create-google-client-credentials)
+  - [Getting Started](#getting-started)
+      - [GOOGLE CHROME SETTINGS FOR SSL](#google-chrome-settings-for-ssl)
+    - [Running Tests](#running-tests)
+  - [Documentation 📚](#documentation-)
+  - [Found a Bug? 🐛](#found-a-bug-)
+  - [License 📃](#license-)
+  - [Copyright](#copyright)
 
 ## Overview 👁️
 
@@ -112,19 +119,48 @@ After cloning, install dependencies with:
 ```bash
 pip install -r requirements.txt
 ```
+#### Create Google Client Credentials
+- First, note that you will need a Google Account. You already have one if you use Gmail.
 
+- Go to the [Google developers credentials page](https://console.developers.google.com/apis/credentials).
+
+- Once in, you may be prompted to agree to their terms of service. Should you agree to those, press the Create credentials button on the next page. Select the option for OAuth client ID:
+![Google Credentials Page](docs/google_crendentials.jpg)
+- Select the Web application option at the top. You can provide a name for the client in the Name field as well. The name you provide will be displayed to users when they are consenting to your application acting on their behalf.
+
+- if you’ll be running your web application locally for now, so you can set the Authorized JavaScript origins to https://127.0.0.1:5000 and Authorized redirect URIs to https://127.0.0.1:5000/login/callback. This will allow your local Flask application to communicate with Google.
+
+- Finally, hit Create and take note of the client ID and client secret. You’ll need both later. You may also download the config file as json and update you `.env` file with the required fields
 ## Getting Started
-1. `cd Code/recommenderapp`
-2. Run the application with:
+1. Run this command `cd Code/recommenderapp`
+2. Create a `.env` file inside `Code/recommenderapp`  and paste the content as found in `.env.example`. Populate the fields with your own credentials
+
+3. Run the application with:
    ```bash
-   python3 app.py
+   python -m flask run --debug
    ```
-3. Visit `localhost:5000` in your browser to start exploring!
+4. Visit `http://127.0.0.1:5000/` in your browser to start exploring!
+5. To test the google sign in feature run the app with `python -m flask run --debug --cert=adhoc` and visit the app on `https://127.0.0.1:5000/`
+
+#### GOOGLE CHROME SETTINGS FOR SSL
+for ssl to work locally on google chrome, you will have to do the following settings within your chrome browser.
+- open this URL on chrome chrome://flags/#allow-insecure-localhost
+- set the Allow invalid certificates for resources loaded from localhost. and enable this by clicking on relaunch at the bottom right. see image below
+![Google settings for SSL](docs/chrome.png)
+- note that this settings is not required for firefox 
+  
+  
+### Running Tests
+1. Make sure pytest is installed on your system.
+2. switch to the tests directortory: `cd MovieRecommender/Code/tests`.
+3. Run the tests with `pytest`
 
 ![Starting App](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXhqdHRreDQ5NGd2MmY3NjB5dGhlbjNuNWU0MXlib3Q4bXp3eGxzayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2IudUHdI075HL02Pkk/giphy.gif)
 
 ## Documentation 📚
 Check out the [Wiki documentation](https://github.com/Shravsssss/MovieRecommender/wiki) for detailed information on how StreamR works and how to contribute.
+
+
 
 ## Found a Bug? 🐛
 We’d love to hear from you! Please [open an issue](https://github.com/Shravsssss/MovieRecommender/issues) if you find any bugs or have feature requests.

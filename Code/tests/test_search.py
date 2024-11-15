@@ -1,4 +1,6 @@
-from Code.recommenderapp.search import Search
+import sys
+sys.path.append('../recommenderapp')
+from recommenderapp.prediction_scripts.search import Search
 import unittest
 import warnings
 import sys

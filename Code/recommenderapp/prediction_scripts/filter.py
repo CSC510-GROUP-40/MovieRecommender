@@ -23,8 +23,8 @@ project_dir = os.path.dirname(code_dir)
 
 class Filter:
 
-    df = pd.read_csv(project_dir + "/data/movies.csv")
-    ratings = pd.read_csv(project_dir + "/data/ratings.csv")
+    df = pd.read_csv(project_dir + "/recommenderapp/prediction_scripts/data/movies.csv")
+    ratings = pd.read_csv(project_dir + "/recommenderapp/prediction_scripts/data/ratings.csv")
 
     def __init__(self):
         pass
