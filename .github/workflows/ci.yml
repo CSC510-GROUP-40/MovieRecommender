@@ -11,9 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        mongodb-version: ['7.0']
+
     steps:
       - uses: actions/checkout@v4
         with:
