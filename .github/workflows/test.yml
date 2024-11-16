@@ -3,10 +3,10 @@ permissions: write-all
 on:
   push:
     branches:
-      - develop-test
+      - feature/ci-actions
   pull_request:
     branches:
-      - develop-test
+      - feature/ci-actions
 
 jobs:
   build:
@@ -17,14 +17,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: develop-test
-      - name: Merge changes into develop-test
+          ref: feature/ci-actions
+      - name: Merge changes into feature/ci-actions
         if: github.event_name == 'pull_request'
         run: |
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
           PR_BRANCH=${{ github.head_ref }}
-          echo "Merging changes from branch $PR_BRANCH into develop-test"
+          echo "Merging changes from branch $PR_BRANCH into feature/ci-actions"
           git fetch origin $PR_BRANCH
           git merge --no-ff origin/$PR_BRANCH
       - name: Install Python 3.10
@@ -51,7 +51,7 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       
       - name: Run autopep8
-        if: github.ref == 'refs/heads/develop-test'
+        if: github.ref == 'refs/heads/feature/ci-actions'
         id: autopep8
         uses: peter-evans/autopep8@v2
         with:
@@ -61,12 +61,12 @@ jobs:
         with:
           lint-path: Code 
       - name: Update README.md with latest run and commit autopep 8 changes
-        if: github.ref == 'refs/heads/develop-test'
+        if: github.ref == 'refs/heads/feature/ci-actions'
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git pull --rebase
-          sed -i "s|(https://github.com/CSC510-GROUP-40/FitnessApp/actions/runs.*)|(https://github.com/CSC510-GROUP-40/FitnessApp/actions/runs/${{ github.run_id }})|" README.md
+          sed -i "s|(https://github.com/CSC510-GROUP-40/MovieRecommender/actions/runs.*)|(https://github.com/CSC510-GROUP-40/MovieRecommender/actions/runs/${{ github.run_id }})|" README.md
           git commit -am "Automated autopep8 fixes and Update README.md with the latest run ID"
           git push -f
 
