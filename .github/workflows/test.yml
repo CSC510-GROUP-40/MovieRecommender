@@ -44,7 +44,8 @@ jobs:
           mongodb-version: ${{ matrix.mongodb-version }}
       - name: Run tests with Coverage
         run: |
-          coverage run -m pytest tests
+          cd Code/tests
+          coverage run -m pytest
           coveralls --service=github-actions
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
@@ -58,7 +59,7 @@ jobs:
       - name: set up pylint badge
         uses: Silleellie/pylint-github-action@v2
         with:
-          lint-path: fitnessapp 
+          lint-path: Code 
       - name: Update README.md with latest run and commit autopep 8 changes
         if: github.ref == 'refs/heads/develop-test'
         run: |
