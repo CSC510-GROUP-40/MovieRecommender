@@ -3,17 +3,16 @@ Your movie night assistant powered by collaborative filtering recommendations!
 
 [![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)](https://github.com/Shravsssss)
 
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/Shravsssss/MovieRecommender/graphs/commit-activity) 
-[![Contributors Activity](https://img.shields.io/github/commit-activity/m/Shravsssss/MovieRecommender)](https://github.com/Shravsssss/MovieRecommender/pulse) 
-[![GitHub issues](https://img.shields.io/github/issues/Shravsssss/MovieRecommender.svg)](https://github.com/Shravsssss/MovieRecommender/issues) 
-[![GitHub issues-closed](https://img.shields.io/github/issues-closed-raw/Shravsssss/MovieRecommender)](https://github.com/Shravsssss/MovieRecommender/issues?q=is%3Aissue+is%3Aclosed) 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT) 
-[![codecov](https://codecov.io/gh/Shravsssss/MovieRecommender/graph/badge.svg?token=Z8QJQ9BE6J)](https://codecov.io/gh/Shravsssss/MovieRecommender)
-[![GitHub release](https://img.shields.io/github/release/git-ankit/MovieRecommender.svg)](https://github.com/Shravsssss/MovieRecommender/releases) 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14027335.svg)](https://doi.org/10.5281/zenodo.14027335)
-[![black](https://img.shields.io/badge/StyleChecker-black-purple.svg)](https://pypi.org/project/black/) 
-
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14025468.svg)](https://doi.org/10.5281/zenodo.14025468)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/CSC510-GROUP-40/MovieRecommender/develop-test)
+[![Python application](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/python-app.yml/badge.svg)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/python-app.yml)
+[![pylint](https://img.shields.io/badge/PyLint-6.32-orange?logo=python&logoColor=white)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/runs/11631472735)
+[![autopep8](./autopep8.svg)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/runs/11631472735)
+[![Tests On Push](http://github.com/VibhavDeo/MovieRecommender/actions/workflows/unit_test.yml/badge.svg)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/unit_test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/CSC510-GROUP-40/MovieRecommender/badge.svg?branch=develop-test)](https://coveralls.io/github/CSC510-GROUP-40/MovieRecommender?branch=develop-test)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/VibhavDeo/MovieRecommender)
 
 ## Skip the endless scroll, StreamR has your next movie pick ready!
 
