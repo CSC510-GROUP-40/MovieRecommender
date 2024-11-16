@@ -209,7 +209,7 @@ def google_loign_callback():
     '''
     handle callback data from google oauth and login user
     '''
-
+    status_code = 200
     try:
         # Get authorization code from url returned by google
         code = request.args.get("code")
@@ -237,7 +237,7 @@ def google_loign_callback():
         userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
         uri, headers, body = app.oauthclient.add_token(userinfo_endpoint)
         userinfo_response = requests.get(uri, headers=headers, data=body)
-        LOGGER.error("okay of me to es")
+       
         if userinfo_response.json().get("email_verified"):
             unique_id = userinfo_response.json()["sub"]
             user_email = userinfo_response.json()["email"]
@@ -264,10 +264,12 @@ def google_loign_callback():
         else:
             LOGGER.info("email not verified")
             error = "User email not available or not verified by Google."  # , 400
-        return render_template('login.html', error=error)
+            status_code = 400
+        return render_template('login.html', error=error), status_code
     except Exception as e:
         LOGGER.error(f"error occured {e}")
-        return render_template('login.html', error="an error occured please try again later")
+        status_code = 400
+        return render_template('login.html', error="an error occured please try again later"), status_code
 
 
 
@@ -285,12 +287,13 @@ def login():
         password = request.form.get('password')
         user = User.query.filter_by(
             username=username).first()  # 'user' is now defined here
-
         if user is None or not user.check_password(password):
             error = 'Invalid username or password'
+            code =  400
+            return render_template('login.html', error=error), code
         else:
             login_user(user)
-            return redirect(url_for('landing_page'))
+            return redirect(url_for('landing_page')), 302
 
     # If we reach this point without returning, 'user' was not assigned due to a POST
     # Or there was an error in login, handle accordingly
