@@ -1,6 +1,7 @@
 import pytest
 from unittest.mock import MagicMock
 import logging
+from flask import session
 import sys
 sys.path.append('../recommenderapp')
 from recommenderapp.app import app, db, User, login_user
@@ -15,11 +16,73 @@ mock_user = {
     'username': 'usernameused',
 }
 
+
+class OAuth:
+    def prepare_token_request(
+            grant_type, body='', include_client_id=True, code_verifier=None, **kwargs):
+        """mock prepreate the tokens
+
+        Args:
+            grant_type (_type_): grant type
+            body (str, optional): body. Defaults to ''.
+            include_client_id (bool, optional): id of client. Defaults to True.
+            code_verifier (_type_, optional): code verify. Defaults to None.
+
+        Returns:
+            _type_: mockparam1
+        """
+        return (
+            "something to do ",  # Return the original token endpoint
+            {"Content-Type": "application/x-www-form-urlencoded"},  # Headers
+            f"code=4223"  # Body of the request
+        )
+    
+    def parse_request_body_response(a, b):
+        """parse response of body
+
+        Args:
+            a (_type_): mockparam1
+            b (_type_): mockparam2
+        """
+        pass
+
+    def add_token(a, b):
+        """adds token to  payload
+
+        Args:
+            a (_type_): mockparam1
+            b (_type_): mockparam2
+
+        Returns:
+            _type_: _description_
+        """
+        return ('uri', {'headers': 'value'}, "body")
+
+    def prepare_request_uri(self, uri, redirect_uri=None, scope=None,
+                            state=None, code_challenge=None, code_challenge_method='plain', **kwargs):
+        """prepare the request URI
+
+        Args:
+            uri (_type_): uri
+            redirect_uri (_type_, optional): redirect uri. Defaults to None.
+            scope (_type_, optional): scope. Defaults to None.
+            state (_type_, optional): state. Defaults to None.
+            code_challenge (_type_, optional): code challenge. Defaults to None.
+            code_challenge_method (str, optional): code challenge method. Defaults to 'plain'.
+
+        Returns:
+            _type_: _description_
+        """
+        return "/"
+    
 @pytest.fixture
 def client():
     """Create a test client and initialize database."""
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    oauthclient = OAuth()
+    app.oauthclient = oauthclient
+    
     app.app_context().push()
     client = app.test_client()
     with app.app_context():
@@ -30,7 +93,6 @@ def client():
         db.drop_all()
 
 
-@pytest.fixture
 def mock_google_provider_cfg():
     """Mock the Google OAuth provider configuration."""
     return {
@@ -39,7 +101,6 @@ def mock_google_provider_cfg():
     }
 
 
-@pytest.fixture
 def mock_token_response():
     """Mock the token response from Google."""
     return {
@@ -52,7 +113,6 @@ def mock_token_response():
     }
 
 
-@pytest.fixture
 def mock_userinfo_response(email_verified=True):
     """Mock the user info response from Google."""
     return {
@@ -117,7 +177,7 @@ def test_redirect_to_google_page(client):
 
 
 @pytest.mark.usefixtures("mocker")
-def test_google_login_callback_unverified_email(client, mocker, mock_google_provider_cfg, mock_token_response, mock_userinfo_response):
+def test_google_login_callback_unverified_email(mocker, client):
     """
     Test google_login_callback when the email is unverified, mocking implementation.
     """
@@ -333,3 +393,145 @@ def test_change_password_no_db_changes(client, auth):
     db.session.refresh(user)
 
     assert user.password_hash == original_password_hash
+    
+
+
+def mock_requests_post(url, headers=None, data=None, auth=None):
+
+    return MagicMock(json=MagicMock(return_value={
+        "access_token": "fake-access-token",
+        "token_type": "Bearer",
+        "expires_in": 3600,
+        "refresh_token": "fake-refresh-token",
+    }))
+    
+def test_google_login_callback_success(mocker, client):
+    with client:
+        # Make an initial request to create the request context
+        client.get('/')
+
+        mock_get = mocker.patch('requests.get')
+        mock_get.side_effect = [
+            mocker.Mock(
+                json=mocker.Mock(
+                    return_value=mock_google_provider_cfg())),
+            mocker.Mock(json=mocker.Mock(return_value={
+                "sub": "1234567890",
+                "email": "testuser@gmail.com",
+                "email_verified": True,  # Simulate verified email
+                "given_name": "Test",
+                "picture": "https://example.com/pic.jpg"
+            })),
+        ]
+
+        mocker.patch('requests.post', side_effect=mock_requests_post)
+
+        response = client.get('/login/callback?code=fake-auth-code')
+
+        # Assertions for successful login
+        assert response.status_code == 302
+        assert '_user_id' in session
+        assert '_fresh' in session
+        assert '_id' in session
+
+
+def test_google_login_does_not_create_multiple_accounts(mocker, client):
+    with client:
+        client.get('/')
+        mock_get = mocker.patch('requests.get')
+
+        mock_get.side_effect = [
+            mocker.Mock(
+                json=mocker.Mock(
+                    return_value=mock_google_provider_cfg())),
+            mocker.Mock(json=mocker.Mock(return_value={
+                "sub": "1234567890",
+                "email": "testuser@gmail.com",
+                "email_verified": True,  # Simulate verified email
+                "given_name": "Test",
+                "picture": "https://example.com/pic.jpg"
+            })),
+
+            # Repeat the mocks for the 3rd and 4th call since we are calling
+            # the endpoint twice
+            mocker.Mock(
+                json=mocker.Mock(
+                    return_value=mock_google_provider_cfg())),
+            mocker.Mock(json=mocker.Mock(return_value={
+                "sub": "1234567890",
+                "email": "testuser@gmail.com",
+                "email_verified": True,  # Simulate verified email
+                "given_name": "Test",
+                "picture": "https://example.com/pic.jpg"
+            })),
+        ]
+
+        mocker.patch('requests.post', side_effect=mock_requests_post)
+
+        # Attempt to login twice
+        response = client.get('/login/callback?code=fake-auth-code')
+        response2 = client.get('/login/callback?code=fake-auth-code')
+
+        # Check the number of users in the database
+        user_count = db.session.query(User).count()
+        assert user_count == 1
+
+def test_google_login_redirects_to_landing_page(mocker, client):
+    with client:
+        client.get('/')
+        mocker.patch('requests.get', side_effect=[
+            mocker.Mock(
+                json=mocker.Mock(return_value=mock_google_provider_cfg())
+            ),
+            mocker.Mock(
+                json=mocker.Mock(return_value={
+                    "sub": "1234567890",
+                    "email": "testuser@gmail.com",
+                    "email_verified": True,
+                    "given_name": "Test",
+                    "picture": "https://example.com/pic.jpg"
+                })
+            )
+        ])
+        mocker.patch('requests.post', side_effect=mock_requests_post)
+
+        response = client.get('/login/callback?code=fake-auth-code')
+
+        assert response.status_code == 302
+        assert response.headers['Location'] == '/'
+
+def test_google_login_creates_user_in_database(mocker, client):
+    with client:
+        client.get('/')
+        mocker.patch('requests.get', side_effect=[
+            mocker.Mock(
+                json=mocker.Mock(return_value=mock_google_provider_cfg())
+            ),
+            mocker.Mock(
+                json=mocker.Mock(return_value={
+                    "sub": "1234567890",
+                    "email": "newuser@gmail.com",
+                    "email_verified": True,
+                    "given_name": "NewUser",
+                    "picture": "https://example.com/pic.jpg"
+                })
+            )
+        ])
+        mocker.patch('requests.post', side_effect=mock_requests_post)
+
+        client.get('/login/callback?code=fake-auth-code')
+
+        user = db.session.query(User).filter_by(email="newuser@gmail.com").first()
+        assert user is not None
+        assert user.username == "NewUser"
+
+def test_google_login_handles_exception(mocker, client):
+    with client:
+        client.get('/')
+        mocker.patch('requests.get', side_effect=Exception("Mocked exception"))
+        mocker.patch('requests.post', side_effect=mock_requests_post)
+
+        response = client.get('/login/callback?code=fake-auth-code')
+
+        assert response.status_code == 400
+        assert b"an error occured please try again later" in response.data
