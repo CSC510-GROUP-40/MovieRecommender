@@ -466,12 +466,7 @@
                     predictedMovies.empty();
 
                     // Store all predicted movies for filtering later
-                    allPredictedMovies = response['recommendations'].map((element, index) => ({
-                        title: element,
-                        poster: response['rating'][element + '-p'],
-                        rating: parseFloat(response['rating'][element + '-r']),
-                        genres: response['rating'][element + '-g'],
-                    }));
+                    allPredictedMovies = response['recommendations'];
                     
                     displayMovies(allPredictedMovies);
                     

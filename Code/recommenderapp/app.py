@@ -322,7 +322,27 @@ def logout():
     logout_user()
     return redirect(url_for('landing_page'))
 
+class Movie():
+    def __init__(self, title, poster, rating, genres):
+        self.title = title
+        self.poster = poster
+        self.rating = rating
+        self.genres = genres
+    
+    def to_dict(self):
+        return {
+            "title": self.title,
+            "poster": self.poster,
+            "rating": self.rating,
+            "genres": self.genres
+        }
 
+# TODO: Add pagination
+# get page number as a parameter
+# if page number is not provided, default to 1
+# checking movies that having N/A values and then send the request to tmdb
+# restruct the response data and modify the ajax code of html page
+# platform is not needed in this post method
 @app.route("/predict", methods=["POST"])
 def predict():
     data = json.loads(request.data)  # contains movies
@@ -335,10 +355,10 @@ def predict():
     # Get recommendations
     recommendations = recommendForNewUser(training_data)
     filtered_recommendations = []
-    movie_with_rating = {}
 
     # Process recommendations and only consider those with valid movie info
     i = 1
+    print(f"Number of recommendations: {len(recommendations)}")
     for movie in recommendations:
         if i > 10:  # Limit to 10 valid recommendations
             break
@@ -351,14 +371,12 @@ def predict():
 
         # Check if the movie has valid IMDb rating, genre, and poster
         if movie_info['imdbRating'] != 'N/A' and movie_info['Genre'] != 'N/A' and movie_info['Poster'] != 'N/A':
-            movie_with_rating[movie + "-c"] = movie_info['Reviews']
-            movie_with_rating[movie + "-s"] = movie_info['Platforms']
-            movie_with_rating[movie + "-r"] = movie_info['imdbRating']
-            movie_with_rating[movie + "-g"] = movie_info['Genre']
-            movie_with_rating[movie + "-p"] = movie_info['Poster']
-
             # Add valid recommendation to filtered recommendations
-            filtered_recommendations.append(movie)
+            filtered_recommendations.append(Movie(title=movie, 
+                                                  poster=movie_info['Poster'], 
+                                                  rating=movie_info['imdbRating'], 
+                                                  genres=movie_info['Genre'])
+                                            .to_dict())
 
             # Save the recommendation to the database
             new_recommendation = Recommendation(
@@ -370,10 +388,8 @@ def predict():
 
     db.session.commit()
 
-    resp = {
-        "recommendations": filtered_recommendations,
-        "rating": movie_with_rating}
-    return resp
+    # Return the filtered recommendations
+    return {"recommendations": filtered_recommendations}
 
 
 @app.route("/history")
