@@ -367,8 +367,6 @@ class Movie():
 # TODO: Add pagination
 # get page number as a parameter
 # if page number is not provided, default to 1
-# checking movies that having N/A values and then send the request to tmdb
-# platform and reviews are not needed in this post method
 @app.route("/predict", methods=["POST"])
 def predict():
     data = json.loads(request.data)  # contains movies
@@ -393,24 +391,21 @@ def predict():
         movie_info = get_movie_info(movie)
         if not movie_info:
             continue  # If no movie information, skip to the next
-        movie = movie_info["Title"]
 
-        # Check if the movie has valid IMDb rating, genre, and poster
-        if movie_info['imdbRating'] != 'N/A' and movie_info['Genre'] != 'N/A' and movie_info['Poster'] != 'N/A':
-            # Add valid recommendation to filtered recommendations
-            filtered_recommendations.append(Movie(title=movie, 
-                                                  poster=movie_info['Poster'], 
-                                                  rating=movie_info['imdbRating'], 
-                                                  genres=movie_info['Genre'])
-                                            .to_dict())
+        # Add valid recommendation to filtered recommendations
+        filtered_recommendations.append(Movie(title=movie_info["Title"], 
+                                                poster=movie_info['Poster'], 
+                                                rating=movie_info['imdbRating'], 
+                                                genres=movie_info['Genre'])
+                                        .to_dict())
 
-            # Save the recommendation to the database
-            new_recommendation = Recommendation(
-                user_id=current_user.id, movie_title=movie)
-            db.session.add(new_recommendation)
+        # Save the recommendation to the database
+        new_recommendation = Recommendation(
+            user_id=current_user.id, movie_title=movie_info["Title"])
+        db.session.add(new_recommendation)
 
-            # Increment the count of valid recommendations
-            i += 1
+        # Increment the count of valid recommendations
+        i += 1
 
     db.session.commit()
 
@@ -463,8 +458,15 @@ def get_movie_info(title):
 
     omdb_response = send_request_to_omdb(title)
 
-    if omdb_response and omdb_response['Response'] == "True":
-        return omdb_response
+    if omdb_response:
+        # Check if the movie has valid IMDb rating, genre, and poster
+        if (
+            omdb_response['Response'] == "True"
+            and omdb_response['imdbRating'] != 'N/A'
+            and omdb_response['Genre'] != 'N/A'
+            and omdb_response['Poster'] != 'N/A'
+        ):
+            return omdb_response
     
     return None
 
