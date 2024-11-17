@@ -323,13 +323,40 @@ def logout():
     return redirect(url_for('landing_page'))
 
 class Movie():
+    """
+    Class to represent a movie with its title, poster, rating, and genres.
+    
+    Attributes:
+        title (str): The title of the movie.
+        poster (str): The URL of the movie poster.
+        rating (float): The IMDb rating of the movie.
+        genres (str): The genres of the movie.
+        
+    Methods:
+        to_dict(self): Convert the movie object to a dictionary.
+    """
     def __init__(self, title, poster, rating, genres):
+        """
+        Constructor for the Movie class.
+        
+        Args:
+            title (str): The title of the movie.
+            poster (str): The URL of the movie poster.
+            rating (float): The IMDb rating of the movie.
+            genres (str): The genres of the movie.
+        """
         self.title = title
         self.poster = poster
         self.rating = rating
         self.genres = genres
     
     def to_dict(self):
+        """
+        Convert the movie object to a dictionary.
+        
+        Output:
+            - A dictionary containing the movie's title, poster, rating, and genres.
+        """
         return {
             "title": self.title,
             "poster": self.poster,
@@ -341,8 +368,7 @@ class Movie():
 # get page number as a parameter
 # if page number is not provided, default to 1
 # checking movies that having N/A values and then send the request to tmdb
-# restruct the response data and modify the ajax code of html page
-# platform is not needed in this post method
+# platform and reviews are not needed in this post method
 @app.route("/predict", methods=["POST"])
 def predict():
     data = json.loads(request.data)  # contains movies
@@ -402,46 +428,45 @@ def history():
         return render_template('history.html', recommendations=[])
     return render_template('history.html', recommendations=recommendations)
 
-
-def get_movie_info(title):
-    year = title[len(title) - 5:len(title) - 1]
-    title = format_title(title)
+def send_request_to_omdb(movie_title):
+    """
+    Send a request to OMDB for movie information.
+    
+    Args:
+        movie_title (str): The title of the movie.
+        
+    Returns:
+        - A dictionary containing the movie's title, poster, rating, and genres.
+    """
+    year = movie_title[len(movie_title) - 5:len(movie_title) - 1]
+    title = format_title(movie_title)
 
     url = f"http://www.omdbapi.com/?t={title}&apikey={OMDB_API_KEY}&y={year}"
     print(url)
 
     response = requests.get(url)
     if response.status_code == 200:
-        platforms = get_streaming_providers(title, TMDB_API_KEY)
-        movie_id = search_movie_tmdb(title, TMDB_API_KEY)
-        reviews = get_movie_reviews(movie_id, TMDB_API_KEY)
-
-        reviews_list = []
-        for review in reviews:
-            reviews_list.append(
-                {"author": review['author'], "content": review['content']})
-
-        res = response.json()
-        if res['Response'] == "True":
-            res = res | {'Platforms': platforms, 'Reviews': reviews_list}
-            return res
-        else:
-            return {
-                'Title': title,
-                'Platforms': "N/A",
-                'Reviews': "N/A",
-                'imdbRating': "N/A",
-                'Genre': 'N/A',
-                "Poster": "https://www.creativefabrica.com/wp-content/uploads/2020/12/29/Line-Corrupted-File-Icon-Office-Graphics-7428407-1.jpg"}
+        return response.json()
     else:
-        return {
-            'Title': title,
-            'Platforms': "N/A",
-            'Reviews': "N/A",
-            'imdbRating': "N/A",
-            'Genre': 'N/A',
-            "Poster": "https://www.creativefabrica.com/wp-content/uploads/2020/12/29/Line-Corrupted-File-Icon-Office-Graphics-7428407-1.jpg"}
+        return None
 
+def get_movie_info(title):
+    """
+    Get movie information from OMDB.
+    
+    Args:
+        title (str): The title of the movie.
+        
+    Returns:
+        - A dictionary containing the movie's information.
+    """
+
+    omdb_response = send_request_to_omdb(title)
+
+    if omdb_response and omdb_response['Response'] == "True":
+        return omdb_response
+    
+    return None
 
 def format_title(movie_title):
     # Remove the year from the movie_title
