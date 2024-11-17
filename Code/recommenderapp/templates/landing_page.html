@@ -449,6 +449,10 @@
 
             var movies = { "movie_list": movie_list };
 
+            // Clear previous predicted movies and show loading message
+            $('#predictedMovies').empty();
+            $('#predictedMovies').append(`<div id="loadingMessage" style="color: #ebe5e6; font-size: 24px; font-weight: bold;">Loading...</div>`);
+
             $.ajax({
                 type: "POST",
                 url: "/predict",
