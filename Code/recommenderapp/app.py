@@ -378,11 +378,8 @@ def predict():
     filtered_recommendations = []
 
     # Process recommendations and only consider those with valid movie info
-    # i = 1
     print(f"Number of recommendations: {len(recommendations)}")
     for movie in recommendations:
-        # if i > 10:  # Limit to 10 valid recommendations
-        #     break
 
         # Get movie information from OMDB or other source
         movie_info = get_movie_info(movie)
@@ -400,9 +397,6 @@ def predict():
         new_recommendation = Recommendation(
             user_id=current_user.id, movie_title=movie_info["Title"])
         db.session.add(new_recommendation)
-
-        # # Increment the count of valid recommendations
-        # i += 1
 
     db.session.commit()
 
