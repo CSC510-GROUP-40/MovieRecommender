@@ -107,5 +107,4 @@ def recommendForNewUser(user_rating):
     joinMoviesAndRecommendations = joinMoviesAndRecommendations[~joinMoviesAndRecommendations["title"].isin(
         rated_movie_titles)]
     
-    # TODO: need to increase the number of recommendations
-    return [x for x in joinMoviesAndRecommendations["title"]][:15]
+    return [x for x in joinMoviesAndRecommendations["title"]][:30]
