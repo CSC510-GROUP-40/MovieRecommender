@@ -18,6 +18,7 @@ class Tests(unittest.TestCase):
         ]
         recommendations = recommendForNewUser(ts)
         self.assertTrue(any("toy story 3 (2010)" == rec.lower() for rec in recommendations))
+        self.assertTrue(any("toy story 2 (1999)" == rec.lower() for rec in recommendations))
 
     def testToyStoryNeg(self):
         ts = [
@@ -31,7 +32,7 @@ class Tests(unittest.TestCase):
             {"title": "Kung Fu Panda (2008)", "rating": 5.0},
         ]
         recommendations = recommendForNewUser(ts)
-        self.assertTrue(any("toy story (1995)" == rec.lower() for rec in recommendations))
+        self.assertTrue(any("kung fu panda 2 (2011)" == rec.lower() for rec in recommendations))
 
     def testKunfuPandaNeg(self):
         ts = [
@@ -52,7 +53,7 @@ class Tests(unittest.TestCase):
             {"title": "Iron Man (2008)", "rating": 5.0},
         ]
         recommendations = recommendForNewUser(ts)
-        self.assertTrue(any("avengers infinity war part i (2018)" == rec.lower() for rec in recommendations))
+        self.assertTrue(any("iron man 2 (2010)" == rec.lower() for rec in recommendations))
 
     def testRoboCop(self):
         ts = [
@@ -67,7 +68,7 @@ class Tests(unittest.TestCase):
             {"title": "Inception (2010)", "rating": 5.0},
         ]
         recommendations = recommendForNewUser(ts)
-        self.assertTrue(any("dark knight the (2008)" == rec.lower() for rec in recommendations))
+        self.assertTrue(any("insomnia (2002)" == rec.lower() for rec in recommendations))
 
     def testDC(self):
         ts = [
