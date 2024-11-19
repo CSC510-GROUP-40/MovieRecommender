@@ -615,11 +615,12 @@ def get_reviews(movie_title):
 
     if movie_id:
         reviews = get_movie_reviews(movie_id, TMDB_API_KEY)
-        reviews_list = [{"author": review['author'],
-                         "content": review['content']} for review in reviews]
-        return jsonify({"reviews": reviews_list})
-    else:
-        return jsonify({"reviews": []}), 404
+        if reviews:
+            reviews_list = [{"author": review['author'],
+                            "content": review['content']} for review in reviews]
+            return jsonify({"reviews": reviews_list})
+    
+    return jsonify({"reviews": []}), 404
 
 
 @app.route('/get_streaming_platforms/<movie_title>', methods=['GET'])

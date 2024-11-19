@@ -72,7 +72,7 @@ def get_movie_reviews(movie_id, API_KEY):
     response = requests.get(url, params=params)
 
     if response.status_code != 200:
-        return []
+        return None
 
     reviews = response.json().get('results', [])
     results = reviews[:max(len(reviews), 5)]
