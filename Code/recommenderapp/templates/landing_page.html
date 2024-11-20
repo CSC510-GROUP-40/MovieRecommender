@@ -495,24 +495,46 @@
 				},
 				select: function (event, ui) {
 					var ulList = $("#selectedMovies");
-					var li = $("<li/>").text(ui.item.value).appendTo(ulList);
-					var removeButton = $("<button/>", {
-						text: "Remove",
-						css: {
-							backgroundColor: "red",
-							color: "white",
-							border: "none",
-							padding: "5px 10px",
-							margin: "5px",
-							borderRadius: "5px",
-							cursor: "pointer",
-						},
-						click: function () {
-							$(this).parent().remove();
-						},
-					}).appendTo(li);
+
+					// Create a new list item (li) and add the selected movie value
+					//var li = $("<li/>").addClass("list-group-item").text(ui.item.value).appendTo(ulList);
+
+					// Create the Bootstrap card with the remove button
+					var card = $("<div/>", {
+						class: "card",
+						css: {width: "18rem", marginBottom: "10px"},
+					}).append(
+						$("<div/>", {class: "card-body"})
+							.append($("<h5/>", {class: "card-title", text: ui.item.value})) // Movie title
+							.append(
+								$("<p/>", {
+									class: "card-text",
+									text: "",
+								})
+							) // Movie description
+							.append(
+								$("<button/>", {
+									text: "Remove",
+									class: "btn btn-danger",
+									css: {
+										borderRadius: "5px",
+										padding: "5px 10px",
+										marginTop: "10px",
+									},
+									click: function () {
+										$(this).closest(".card").remove(); // Remove the card on click
+									},
+								})
+							)
+					);
+
+					// Append the card to the list item
+					card.appendTo(ulList);
+
+					// Clear the search input
 					$("#searchBox").val("");
-					return false;
+
+					return false; // Prevent default behavior
 				},
 				minLength: 2,
 			});
@@ -537,9 +559,9 @@
 
 		$("#predict").click(function () {
 			var movie_list = [];
-
-			$("#selectedMovies li").each(function () {
-				var movieTitle = $(this).text().split("Remove")[0].trim();
+			$("#selectedMovies .card").each(function () {
+				var movieTitle = $(this).find(".card-title").text().trim();
+				// Push the extracted title to the movie_list
 				movie_list.push(movieTitle);
 			});
 
