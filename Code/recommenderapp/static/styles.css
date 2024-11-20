@@ -1,0 +1,10 @@
+.auth-form-header{
+    color: rgba(255, 0, 0, 0.738);
+    text-transform: uppercase;
+}
+
+.btn-primary{
+    color: white;
+    background-color: rgba(255, 0, 0, 0.738);
+    border-width: 0;
+}

@@ -20,6 +20,7 @@
  </style>
  <div class="form-container p-4 rounded">
     <form action="/login" method="post" class="p-4 rounded shadow" style="width: 300px;">
+        <h2 class="auth-form-header text-center">Login</h2>
         <div class="mb-3">
             <label for="username" class="form-label text-white">Username</label>
             <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required>
@@ -32,6 +33,7 @@
     </form>
     <div class="text-center">
         <a href="{{url_for('google_login')}}" class="text-center text-white">Sign In With Google</a>
+        <p style="color:#ebe5e6; font-size: 15px; font-weight: bold;" class="my-4">New User? <a href="/register">Register here</a></p>
     </div>
 </div>
  {% endblock %}
