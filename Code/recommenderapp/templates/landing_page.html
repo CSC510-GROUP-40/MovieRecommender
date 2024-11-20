@@ -1,542 +1,613 @@
-
-{% extends 'layout.html' %}
-{% block styles %}
+{% extends 'layout.html' %} {% block styles %}
 <script src="https://apis.google.com/js/api.js"></script>
 <style>
-    /* Navbar styles */
-    .navbar {
-        border-radius: 0;
-        height: 60px;
-        background-color: #d9534f !important; /* Force red color */
-        border: none; /* Remove any border */
-    }
+	/* Navbar styles */
+	.navbar {
+		border-radius: 0;
+		height: 60px;
+		background-color: #d9534f !important; /* Force red color */
+		border: none; /* Remove any border */
+	}
 
-    .navbar .nav > li > a, .navbar .nav > li > button {
-        color: white !important;
-        font-size: 16px;
-        padding: 15px 20px;
-        height: 100%;
-    }
+	.navbar .nav > li > a,
+	.navbar .nav > li > button {
+		color: white !important;
+		font-size: 16px;
+		padding: 15px 20px;
+		height: 100%;
+	}
 
-    .navbar .dropdown-menu {
-        background-color: #d9534f; /* Dropdown background color matching navbar */
-        color: white; /* Ensure text is white in the dropdown */
-        border: none;
-    }
+	.navbar .dropdown-menu {
+		background-color: #d9534f; /* Dropdown background color matching navbar */
+		color: white; /* Ensure text is white in the dropdown */
+		border: none;
+	}
 
-    .navbar .dropdown-menu > li > a {
-        color: white !important;
-        font-size: 16px;
-    }
+	.navbar .dropdown-menu > li > a {
+		color: white !important;
+		font-size: 16px;
+	}
 
-    .navbar .dropdown-menu > li.dropdown-header {
-        color: white;
-        font-size: 18px; /* Larger font size for username */
-        background-color: #d9534f; /* Ensure background matches navbar */
-        padding: 10px 20px; /* Add padding for a better look */
-    }
+	.navbar .dropdown-menu > li.dropdown-header {
+		color: white;
+		font-size: 18px; /* Larger font size for username */
+		background-color: #d9534f; /* Ensure background matches navbar */
+		padding: 10px 20px; /* Add padding for a better look */
+	}
 
-    .navbar .dropdown-menu > li > a:hover {
-        background-color: rgba(0, 0, 0, 0.7) !important;
-    }
+	.navbar .dropdown-menu > li > a:hover {
+		background-color: rgba(0, 0, 0, 0.7) !important;
+	}
 
-    .navbar .header-btn {
-        height: 60px;
-        line-height: 30px;
-        display: flex;
-        align-items: center;
-    }
+	.navbar .header-btn {
+		height: 60px;
+		line-height: 30px;
+		display: flex;
+		align-items: center;
+	}
 
-    /* Dropdown toggle active (clicked) state */
-    .navbar .dropdown-toggle:active, .navbar .dropdown-toggle:focus {
-        background-color: #d9534f !important; /* Red color when clicked */
-        color: white !important; /* Ensure the text color stays white */
-        border-color: transparent; /* Remove any border */
-    }
-    .scrollable-card-container {
-        /* max-height: 1000px; */
-        max-width: 1000px;
-        overflow-y: auto;
-    }
+	/* Dropdown toggle active (clicked) state */
+	.navbar .dropdown-toggle:active,
+	.navbar .dropdown-toggle:focus {
+		background-color: #d9534f !important; /* Red color when clicked */
+		color: white !important; /* Ensure the text color stays white */
+		border-color: transparent; /* Remove any border */
+	}
+	.scrollable-card-container {
+		/* max-height: 1000px; */
+		max-width: 1000px;
+		overflow-y: auto;
+	}
 
-    .card {
-        width: 29%; /* Reduce card width */
-        background-color: #888888;
-        padding: 6px;  /* Reduce padding */
-        margin-bottom: 10px; /* Reduce bottom margin */
-        margin-left: 0.6%;  /* Small left margin to keep spacing consistent */
-        margin-right: 0.6%; /* Small right margin */
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        font-size: 11px; /* Reduce font size for text */
-        /* font-weight: bold; */
-        color: white;
-    }
+	.card {
+		width: 29%; /* Reduce card width */
+		background-color: #888888;
+		padding: 6px; /* Reduce padding */
+		margin-bottom: 10px; /* Reduce bottom margin */
+		margin-left: 0.6%; /* Small left margin to keep spacing consistent */
+		margin-right: 0.6%; /* Small right margin */
+		border-radius: 8px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		font-size: 11px; /* Reduce font size for text */
+		/* font-weight: bold; */
+		color: white;
+	}
 
-    .card-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around; /* Space between cards */
-    }
+	.card-container {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-around; /* Space between cards */
+	}
 
-    .card img {
-        width: 100%; /* Ensure the image fills the width of the card */
-        height: auto; /* Keep aspect ratio of the image */
-        max-height: 250px; /* Set max height to keep images uniform */
-    }
+	.card img {
+		width: 100%; /* Ensure the image fills the width of the card */
+		height: auto; /* Keep aspect ratio of the image */
+		max-height: 250px; /* Set max height to keep images uniform */
+	}
 
-    #predictedMovies .card {
-        width: 18%;
-        margin: 0.5%;
-    }
-    
-    body {
-        font-family: 'Noto Sans', sans-serif;
-        background-color: #141414;
-        color: white;
-        background-size: cover;
-    }
-    body::after {
-        content: "";
-        background: url("https://wallpaperaccess.com/full/8212583.jpg") no-repeat center center fixed;
-        background-size: cover; 
-        opacity: 0.5;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        position: fixed; 
-        z-index: -1;
-    }
+	#predictedMovies .card {
+		width: 18%;
+		margin: 0.5%;
+	}
 
-    .btn {
-        padding: 8px 15px; /* Adjust button padding */
-        font-size: 14px; /* Adjust button font size */
-        cursor: pointer;
-    }
+	body {
+		font-family: "Noto Sans", sans-serif;
+		background-color: #141414;
+		color: white;
+		background-size: cover;
+	}
+	body::after {
+		content: "";
+		background: url("https://wallpaperaccess.com/full/8212583.jpg") no-repeat
+			center center fixed;
+		background-size: cover;
+		opacity: 0.5;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		position: fixed;
+		z-index: -1;
+	}
 
-    .red-button {
-        background-color: #d9534f;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        text-decoration: none;
-        font-size: 16px;
-        cursor: pointer;
-        display: inline-block;
-        max-width: 120px;
-        height: 60px; /* Match the height of the header */
-        text-align: center;
-    }
-    
-    .btn-primary {
-        background-color: #d9534f;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        margin-top: 10%;
-        text-decoration: none;
-        font-size: 10px;
-        cursor: pointer;
-        display: inline-block;
-        max-width: 100px;
-        height: 50px; /* Adjust the height */
-        text-align: center;
-    }
+	.btn {
+		padding: 8px 15px; /* Adjust button padding */
+		font-size: 14px; /* Adjust button font size */
+		cursor: pointer;
+	}
 
-    #paginationButtons button {
-        margin: 0 5px;
-        padding: 5px 10px;
-        cursor: pointer;
-        border: 1px solid #d9534f;
-        background-color: #d9534f;
-        color: #fff; /* White text */
-        font-size: 14px;
-        transition: background-color 0.3s, color 0.3s;
-    }
+	.red-button {
+		background-color: #d9534f;
+		color: white;
+		border: none;
+		padding: 5px 10px;
+		text-decoration: none;
+		font-size: 16px;
+		cursor: pointer;
+		display: inline-block;
+		max-width: 120px;
+		height: 60px; /* Match the height of the header */
+		text-align: center;
+	}
 
-    #paginationButtons button:hover {
-        background-color: #fff; /* White background on hover */
-        color: #000; /* Black text on hover */
-    }
+	.btn-primary {
+		background-color: #d9534f;
+		color: white;
+		border: none;
+		padding: 5px 10px;
+		margin-top: 10%;
+		text-decoration: none;
+		font-size: 10px;
+		cursor: pointer;
+		display: inline-block;
+		max-width: 100px;
+		height: 50px; /* Adjust the height */
+		text-align: center;
+	}
 
-    #paginationButtons button.active {
-        background-color: #fff; /* White background for active button */
-        color: #000; /* Black text for active button */
-        font-weight: bold;
-    }
+	#paginationButtons button {
+		margin: 0 5px;
+		padding: 5px 10px;
+		cursor: pointer;
+		border: 1px solid #d9534f;
+		background-color: #d9534f;
+		color: #fff; /* White text */
+		font-size: 14px;
+		transition: background-color 0.3s, color 0.3s;
+	}
+
+	#paginationButtons button:hover {
+		background-color: #fff; /* White background on hover */
+		color: #000; /* Black text on hover */
+	}
+
+	#paginationButtons button.active {
+		background-color: #fff; /* White background for active button */
+		color: #000; /* Black text for active button */
+		font-weight: bold;
+	}
 </style>
-{% endblock %}
-{% block content %}
+{% endblock %} {% block content %}
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgba(0, 0, 0, 0.5); height: 60px;">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url_for('landing_page') }}" style="font-size: 24px; font-weight: bold;">Movie Recommender</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a href="{{ url_for('history') }}" class="btn btn-outline-light">View History</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('view_watchlist') }}" class="btn btn-outline-light">Watchlist</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Profile" class="rounded-circle" style="width: 30px; height: 30px;">
-                        {{ current_user.username }}
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><span class="dropdown-header">Welcome, {{ current_user.username }}</span></li>
-                        <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
+<nav
+	class="navbar navbar-expand-lg navbar-dark"
+	style="background-color: rgba(0, 0, 0, 0.5); height: 60px">
+	<div class="container-fluid">
+		<a
+			class="navbar-brand"
+			href="{{ url_for('landing_page') }}"
+			style="font-size: 24px; font-weight: bold"
+			>Movie Recommender</a
+		>
+		<button
+			class="navbar-toggler"
+			type="button"
+			data-bs-toggle="collapse"
+			data-bs-target="#navbarNav"
+			aria-controls="navbarNav"
+			aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav ms-auto">
+				<li class="nav-item">
+					<a href="{{ url_for('history') }}" class="btn btn-outline-light"
+						>View History</a
+					>
+				</li>
+				<li class="nav-item">
+					<a href="{{ url_for('view_watchlist') }}" class="btn btn-outline-light"
+						>Watchlist</a
+					>
+				</li>
+				<li class="nav-item dropdown">
+					<a
+						class="nav-link dropdown-toggle"
+						href="#"
+						id="navbarDropdown"
+						role="button"
+						data-bs-toggle="dropdown"
+						aria-expanded="false">
+						<img
+							src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
+							alt="Profile"
+							class="rounded-circle"
+							style="width: 30px; height: 30px" />
+						{{ current_user.username }}
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<li>
+							<span class="dropdown-header">Welcome, {{ current_user.username }}</span>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
 </nav>
-
 
 <!-- Main Container -->
 <div class="container my-5">
-    <!-- Centered Search Bar and Refresh Button -->
-    <div class="row text-center mb-4">
-        <h2 class="text-light fw-bold">Search for Movies</h2>
-        <div class="col-md-8 mx-auto d-flex justify-content-center align-items-center">
-            <input type="text" name="search" id="searchBox" class="form-control" style="max-width: 500px;" placeholder="Search Here" />
-            <input type="button" class="btn btn-danger ms-3" name="predict" id="predict" value="Predict" style="height: 60px;">
-            <button class="btn btn-danger ms-3" id="refreshBtn" style="height: 60px;">Refresh</button>
-        </div>
-    </div>
+	<!-- Centered Search Bar and Refresh Button -->
+	<div class="row text-center mb-4">
+		<h2 class="text-light fw-bold">Search for Movies</h2>
+		<div
+			class="col-md-8 mx-auto d-flex justify-content-center align-items-center">
+			<input
+				type="text"
+				name="search"
+				id="searchBox"
+				class="form-control"
+				style="max-width: 500px"
+				placeholder="Search Here" />
+			<input
+				type="button"
+				class="btn btn-danger ms-3"
+				name="predict"
+				id="predict"
+				value="Predict"
+				style="height: 60px" />
+			<button class="btn btn-danger ms-3" id="refreshBtn" style="height: 60px">
+				Refresh
+			</button>
+		</div>
+	</div>
 
-    <!-- Filters Section -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <label for="genre-select" class="form-label text-light">Filter by Genres:</label>
-            <select id="genre-select" class="form-control" multiple>
-                <option value="Action">Action</option>
-                <option value="Adventure">Adventure</option>
-                <option value="Comedy">Comedy</option>
-                <option value="Drama">Drama</option>
-                <option value="Horror">Horror</option>
-                <option value="Romance">Romance</option>
-                <option value="Sci-Fi">Sci-Fi</option>
-            </select>
-        </div>
-        <div class="col-md-6">
-            <label for="rating-filter" class="form-label text-light">Filter by Rating (min):</label>
-            <input type="number" id="rating-filter" class="form-control" placeholder="Enter min rating (0-10)" min="0" max="10">
-        </div>
-    </div>
-    <div class="text-center mb-4">
-        <button class="btn btn-danger" id="filterMovies">Apply Filters</button>
-    </div>
+	<!-- Filters Section -->
+	<div class="row mb-4">
+		<div class="col-md-6">
+			<label for="genre-select" class="form-label text-light"
+				>Filter by Genres:</label
+			>
+			<select id="genre-select" class="form-control" multiple>
+				<option value="Action">Action</option>
+				<option value="Adventure">Adventure</option>
+				<option value="Comedy">Comedy</option>
+				<option value="Drama">Drama</option>
+				<option value="Horror">Horror</option>
+				<option value="Romance">Romance</option>
+				<option value="Sci-Fi">Sci-Fi</option>
+			</select>
+		</div>
+		<div class="col-md-6">
+			<label for="rating-filter" class="form-label text-light"
+				>Filter by Rating (min):</label
+			>
+			<input
+				type="number"
+				id="rating-filter"
+				class="form-control"
+				placeholder="Enter min rating (0-10)"
+				min="0"
+				max="10" />
+		</div>
+	</div>
+	<div class="text-center mb-4">
+		<button class="btn btn-danger" id="filterMovies">Apply Filters</button>
+	</div>
 
-    <!-- Selected Movies and Predict Button -->
-    <div class="row">
-        <div class="col-md-10">
-            <h2 class="text-light fw-bold">Predicted Movies</h2>
-            <div class="scrollable-card-container">
-                <div id="paginationButtons"></div>
-                <div id="predictedMovies" class="card-container"></div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <h2 class="text-light fw-bold">Selected Movies</h2>
-            <ul id="selectedMovies" class="list-unstyled">
-                <div class="card-container">
-                    {% for movie in training_data %}
-                    <div class="card mb-2">
-                        <h5>{{ movie.title }}</h5>
-                        <p>Rating: {{ movie.rating }}</p>
-                        <p>IMDb Rating: {{ movie.imdbRating }}</p>
-                    </div>
-                    {% endfor %}
-                </div>
-            </ul>
-        </div>
-    </div>
+	<!-- Selected Movies and Predict Button -->
+	<div class="row">
+		<div class="col-md-10">
+			<h2 class="text-light fw-bold">Predicted Movies</h2>
+			<div class="scrollable-card-container">
+				<div id="paginationButtons"></div>
+				<div id="predictedMovies" class="card-container"></div>
+			</div>
+		</div>
+		<div class="col-md-2">
+			<h2 class="text-light fw-bold">Selected Movies</h2>
+			<ul id="selectedMovies" class="list-unstyled">
+				<div class="card-container">
+					{% for movie in training_data %}
+					<div class="card mb-2">
+						<h5>{{ movie.title }}</h5>
+						<p>Rating: {{ movie.rating }}</p>
+						<p>IMDb Rating: {{ movie.imdbRating }}</p>
+					</div>
+					{% endfor %}
+				</div>
+			</ul>
+		</div>
+	</div>
 
-    <!-- Submit All Feedback Button -->
-    <div class="container text-center mb-4">
-        <button id="submitAllFeedback" class="btn btn-primary" style="display: none;">Submit Feedback</button>
-    </div>
+	<!-- Submit All Feedback Button -->
+	<div class="container text-center mb-4">
+		<button id="submitAllFeedback" class="btn btn-primary" style="display: none">
+			Submit Feedback
+		</button>
+	</div>
 </div>
 
 <!-- Reviews Dialog (hidden initially) -->
-<div id="reviewsDialog" title="Movie Reviews" style="display:none;">
-    <div id="reviewsContent"></div>
+<div id="reviewsDialog" title="Movie Reviews" style="display: none">
+	<div id="reviewsContent"></div>
 </div>
 
 <!-- Streaming Platforms Dialog (hidden initially) -->
-<div id="platformsDialog" title="Available Streaming Platforms" style="display:none;">
-    <div id="platformsContent" class="d-flex justify-content-around"></div>
+<div
+	id="platformsDialog"
+	title="Available Streaming Platforms"
+	style="display: none">
+	<div id="platformsContent" class="d-flex justify-content-around"></div>
 </div>
 
 <!-- Data Collected Message (hidden initially) -->
-<div id="dataCollected" class="container text-center" style="display: none;">
-    <h1 class="text-light fw-bold">Thanks! Your response was stored.</h1>
-    <input type="button" id="refreshPage" class="btn btn-danger" value="Take another attempt">
+<div id="dataCollected" class="container text-center" style="display: none">
+	<h1 class="text-light fw-bold">Thanks! Your response was stored.</h1>
+	<input
+		type="button"
+		id="refreshPage"
+		class="btn btn-danger"
+		value="Take another attempt" />
 </div>
-   
 
-
-{% endblock %}
-
-
-    {% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
-    var apiKey = 'AIzaSyBkk7lYRb1WZCB1QmEu5t_GzF0crk2cd3I';
-    gapi.load('client', initYouTubeAPI);
-    function initYouTubeAPI() {
-        gapi.client.init({
-            apiKey: apiKey,
-            discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"],
-        }).then(function () {
-            console.log('YouTube API initialized');
-        });
-    }
+	var apiKey = "AIzaSyBkk7lYRb1WZCB1QmEu5t_GzF0crk2cd3I";
+	gapi.load("client", initYouTubeAPI);
+	function initYouTubeAPI() {
+		gapi.client
+			.init({
+				apiKey: apiKey,
+				discoveryDocs: [
+					"https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest",
+				],
+			})
+			.then(function () {
+				console.log("YouTube API initialized");
+			});
+	}
 
-    // Function to show reviews in a dialog box when "Check Reviews" button is clicked
-    function showReviews(movieTitle) {
-            // Send the original movie title to the backend
-            $.ajax({
-                type: "GET",
-                url: `/get_reviews/${encodeURIComponent(movieTitle)}`,  // Fetch reviews from the backend
-                success: function (response) {
-                    var reviewsHtml = '';
-                    response.reviews.forEach(function(review) {
-                        reviewsHtml += `<p><strong>${review.author}</strong>: ${review.content}</p>`;
-                    });
+	// Function to show reviews in a dialog box when "Check Reviews" button is clicked
+	function showReviews(movieTitle) {
+		// Send the original movie title to the backend
+		$.ajax({
+			type: "GET",
+			url: `/get_reviews/${encodeURIComponent(movieTitle)}`, // Fetch reviews from the backend
+			success: function (response) {
+				var reviewsHtml = "";
+				response.reviews.forEach(function (review) {
+					reviewsHtml += `<p><strong>${review.author}</strong>: ${review.content}</p>`;
+				});
 
-                    if (reviewsHtml === '') {
-                        reviewsHtml = '<p>No reviews available for this movie.</p>';
-                    }
+				if (reviewsHtml === "") {
+					reviewsHtml = "<p>No reviews available for this movie.</p>";
+				}
 
-                    $('#reviewsContent').html(reviewsHtml);  // Update the dialog content with reviews
-                    
-                    // Open the dialog box with jQuery UI
-                    $("#reviewsDialog").dialog({
-                        modal: true,
-                        width: 600,
-                        buttons: {
-                            Close: function() {
-                                $(this).dialog("close");
-                            }
-                        }
-                    });
-                },
-                error: function (error) {
-                    console.log('Error fetching reviews:', error);
-                    $('#reviewsContent').html('<p>Failed to load reviews. Please try again later.</p>');
-                    $("#reviewsDialog").dialog({
-                        modal: true,
-                        width: 600,
-                        buttons: {
-                            Close: function() {
-                                $(this).dialog("close");
-                            }
-                        }
-                    });
-                }
-            });
-        }
+				$("#reviewsContent").html(reviewsHtml); // Update the dialog content with reviews
 
-        // Function to show streaming platforms in a dialog box when "Check Streaming Platforms" button is clicked
-        function showStreamingPlatforms(movieTitle, index) {
-            // Clear any previous platform data
-            $('#platformsContent').html('<p>Loading streaming platforms...</p>');
+				// Open the dialog box with jQuery UI
+				$("#reviewsDialog").dialog({
+					modal: true,
+					width: 600,
+					buttons: {
+						Close: function () {
+							$(this).dialog("close");
+						},
+					},
+				});
+			},
+			error: function (error) {
+				console.log("Error fetching reviews:", error);
+				$("#reviewsContent").html(
+					"<p>Failed to load reviews. Please try again later.</p>"
+				);
+				$("#reviewsDialog").dialog({
+					modal: true,
+					width: 600,
+					buttons: {
+						Close: function () {
+							$(this).dialog("close");
+						},
+					},
+				});
+			},
+		});
+	}
 
-            // Fetch the streaming providers for the movie when the button is clicked
-            $.ajax({
-                type: "GET",
-                url: `/get_streaming_platforms/${encodeURIComponent(movieTitle)}`,
-                success: function (response) {
-                    var streamingHtml = '';
+	// Function to show streaming platforms in a dialog box when "Check Streaming Platforms" button is clicked
+	function showStreamingPlatforms(movieTitle, index) {
+		// Clear any previous platform data
+		$("#platformsContent").html("<p>Loading streaming platforms...</p>");
 
-                    // Check if platforms are available in the response
-                    if (response.length === 0) {
-                        // If no platforms are available, show message
-                        streamingHtml = '<p>This movie is not available in the US region.</p>';
-                    } else {
-                        // Only show the first four platforms
-                        var platforms = response.slice(0, 4);
-                        platforms.forEach(function (platform) {
-                            streamingHtml += `<img src="${platform.logo}" alt="${platform.name}" style="width: 50px; height: 50px;">`;
-                        });
-                    }
+		// Fetch the streaming providers for the movie when the button is clicked
+		$.ajax({
+			type: "GET",
+			url: `/get_streaming_platforms/${encodeURIComponent(movieTitle)}`,
+			success: function (response) {
+				var streamingHtml = "";
 
-                    // Insert streaming platforms or message into the dialog content
-                    $('#platformsContent').html(streamingHtml);
+				// Check if platforms are available in the response
+				if (response.length === 0) {
+					// If no platforms are available, show message
+					streamingHtml = "<p>This movie is not available in the US region.</p>";
+				} else {
+					// Only show the first four platforms
+					var platforms = response.slice(0, 4);
+					platforms.forEach(function (platform) {
+						streamingHtml += `<img src="${platform.logo}" alt="${platform.name}" style="width: 50px; height: 50px;">`;
+					});
+				}
 
-                    // Open the dialog box with jQuery UI
-                    $("#platformsDialog").dialog({
-                        modal: true,
-                        width: 600,
-                        buttons: {
-                            Close: function() {
-                                $(this).dialog("close");
-                            }
-                        }
-                    });
-                },
-                error: function (error) {
-                    console.log('Error fetching streaming platforms:', error);
-                    $('#platformsContent').html('<p>Failed to load streaming platforms.</p>');
-                }
-            });
-        }
+				// Insert streaming platforms or message into the dialog content
+				$("#platformsContent").html(streamingHtml);
+
+				// Open the dialog box with jQuery UI
+				$("#platformsDialog").dialog({
+					modal: true,
+					width: 600,
+					buttons: {
+						Close: function () {
+							$(this).dialog("close");
+						},
+					},
+				});
+			},
+			error: function (error) {
+				console.log("Error fetching streaming platforms:", error);
+				$("#platformsContent").html("<p>Failed to load streaming platforms.</p>");
+			},
+		});
+	}
 </script>
 <script>
+	$(document).ready(function () {
+		// Store predicted movies for filtering
+		let allPredictedMovies = [];
+		// Global variables for pagination
+		const moviesPerPage = 5; // Number of movies per page
+		let totalPages = 0;
 
-    $(document).ready(function () {
-        // Store predicted movies for filtering
-        let allPredictedMovies = [];
-        // Global variables for pagination
-        const moviesPerPage = 5; // Number of movies per page
-        let totalPages = 0;
+		function displayErrorMessage(message) {
+			$("#errorMessageText").text(message);
+			$("#errorMessage").show(); // Show the error card
+			$("#main").css("opacity", "0.1");
+		}
 
-        function displayErrorMessage(message) {
-            $('#errorMessageText').text(message);
-            $('#errorMessage').show(); // Show the error card
-            $('#main').css('opacity', '0.1');
-        }
+		$(function () {
+			$("#searchBox").autocomplete({
+				source: function (request, response) {
+					$.ajax({
+						type: "POST",
+						url: "http://localhost:5000/search",
+						dataType: "json",
+						cache: false,
+						data: {
+							q: request.term,
+						},
+						success: function (data) {
+							//alert(data);
+							// console.log(data);
+							response(data);
+						},
+						error: function (jqXHR, textStatus, errorThrown) {
+							console.log(textStatus + " " + errorThrown);
+						},
+					});
+				},
+				select: function (event, ui) {
+					var ulList = $("#selectedMovies");
+					var li = $("<li/>").text(ui.item.value).appendTo(ulList);
+					var removeButton = $("<button/>", {
+						text: "Remove",
+						css: {
+							backgroundColor: "red",
+							color: "white",
+							border: "none",
+							padding: "5px 10px",
+							margin: "5px",
+							borderRadius: "5px",
+							cursor: "pointer",
+						},
+						click: function () {
+							$(this).parent().remove();
+						},
+					}).appendTo(li);
+					$("#searchBox").val("");
+					return false;
+				},
+				minLength: 2,
+			});
+		});
 
-        $(function () {
-            $("#searchBox").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        type: "POST",
-                        url: "http://localhost:5000/search",
-                        dataType: "json",
-                        cache: false,
-                        data: {
-                            q: request.term
-                        },
-                        success: function (data) {
-                            //alert(data);
-                            // console.log(data);
-                            response(data);
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(textStatus + " " + errorThrown);
-                        }
-                    });
-                },
-                select: function (event, ui) {
-                    var ulList = $('#selectedMovies');
-                    var li = $('<li/>').text(ui.item.value).appendTo(ulList);
-                    var removeButton = $('<button/>', {
-        text: 'Remove',
-        css: {
-            backgroundColor: 'red',
-            color: 'white',
-            border: 'none',
-            padding: '5px 10px',
-            margin: '5px',
-            borderRadius: '5px',
-            cursor: 'pointer'
-        },
-        click: function () { $(this).parent().remove(); }
-    }).appendTo(li);
-                    $('#searchBox').val("");
-                    return false;
-                },
-                minLength: 2
-            });
-        });
+		// Function to create pagination buttons
+		function createPaginationButtons(numberOfMovies) {
+			const paginationContainer = $("#paginationButtons");
+			paginationContainer.empty();
 
-        // Function to create pagination buttons
-        function createPaginationButtons(numberOfMovies) {
-            const paginationContainer = $('#paginationButtons');
-            paginationContainer.empty();
+			totalPages = Math.ceil(numberOfMovies / moviesPerPage);
 
-            totalPages = Math.ceil(numberOfMovies / moviesPerPage);
+			for (let i = 1; i <= totalPages; i++) {
+				const button = $(`<button id="pageButton${i}">${i}</button>`);
+				button.click(function () {
+					displayMoviesForPage(i);
+				});
 
-            for (let i = 1; i <= totalPages; i++) {
-                const button = $(`<button id="pageButton${i}">${i}</button>`);
-                button.click(function () {
-                    displayMoviesForPage(i);
-                });
+				paginationContainer.append(button);
+			}
+		}
 
-                paginationContainer.append(button);
-            }
-        }
+		$("#predict").click(function () {
+			var movie_list = [];
 
-        $("#predict").click(function () {
-            var movie_list = [];
+			$("#selectedMovies li").each(function () {
+				var movieTitle = $(this).text().split("Remove")[0].trim();
+				movie_list.push(movieTitle);
+			});
 
-            $('#selectedMovies li').each(function () {
-                var movieTitle = $(this).text().split('Remove')[0].trim();
-                movie_list.push(movieTitle);
-            });
+			var movies = {movie_list: movie_list};
 
-            var movies = { "movie_list": movie_list };
+			// Clear previous predicted movies and show loading message
+			$("#predictedMovies").empty();
+			$("#predictedMovies").append(
+				`<div id="loadingMessage" style="color: #ebe5e6; font-size: 24px; font-weight: bold;">Loading...</div>`
+			);
+			$("#paginationButtons").empty();
 
-            // Clear previous predicted movies and show loading message
-            $('#predictedMovies').empty();
-            $('#predictedMovies').append(`<div id="loadingMessage" style="color: #ebe5e6; font-size: 24px; font-weight: bold;">Loading...</div>`);
-            $('#paginationButtons').empty();
+			$.ajax({
+				type: "POST",
+				url: "/predict",
+				dataType: "json",
+				contentType: "application/json;charset=UTF-8",
+				traditional: "true",
+				cache: false,
+				data: JSON.stringify(movies),
+				success: function (response) {
+					var predictedMovies = $("#predictedMovies");
+					predictedMovies.empty();
 
-            $.ajax({
-                type: "POST",
-                url: "/predict",
-                dataType: "json",
-                contentType: "application/json;charset=UTF-8",
-                traditional: "true",
-                cache: false,
-                data: JSON.stringify(movies),
-                success: function (response) {
-                    var predictedMovies = $('#predictedMovies');
-                    predictedMovies.empty();
+					// Store all predicted movies for filtering later
+					allPredictedMovies = response["recommendations"];
 
-                    // Store all predicted movies for filtering later
-                    allPredictedMovies = response['recommendations'];
-                    
-                    // displayMovies(allPredictedMovies);
+					// displayMovies(allPredictedMovies);
 
-                    // Create pagination buttons
-                    createPaginationButtons(allPredictedMovies.length);
+					// Create pagination buttons
+					createPaginationButtons(allPredictedMovies.length);
 
-                    // Initialize and display the first page of movies
-                    displayMoviesForPage(1);
-                    
-                    $("#submitAllFeedback").show();
-                },
-                error: function (error) {
-                    console.log("ERROR ->", error);
-                }
-            });
-        });
+					// Initialize and display the first page of movies
+					displayMoviesForPage(1);
 
-        // TODO: how to maintain the filter functionality for pagination
-        // Function to display movies for a specific page
-        function displayMoviesForPage(page) {
-            const predictedMovies = $('#predictedMovies');
-            predictedMovies.empty();
+					$("#submitAllFeedback").show();
+				},
+				error: function (error) {
+					console.log("ERROR ->", error);
+				},
+			});
+		});
 
-            const startIndex = (page - 1) * moviesPerPage;
-            const endIndex = startIndex + moviesPerPage;
+		// TODO: how to maintain the filter functionality for pagination
+		// Function to display movies for a specific page
+		function displayMoviesForPage(page) {
+			const predictedMovies = $("#predictedMovies");
+			predictedMovies.empty();
 
-            const moviesToDisplay = allPredictedMovies.slice(startIndex, endIndex);
+			const startIndex = (page - 1) * moviesPerPage;
+			const endIndex = startIndex + moviesPerPage;
 
-            // Update button states
-            for (let i = 1; i <= totalPages; i++) {
-                const button = $('#pageButton' + i);
-                
-                if (i === page) {
-                    button.addClass('active');
-                } else {
-                    button.removeClass('active');
-                }
-            }
+			const moviesToDisplay = allPredictedMovies.slice(startIndex, endIndex);
 
-            // Render movies for the current page
-            moviesToDisplay.forEach(function (movie, index) {
-                var movieCard = `
+			// Update button states
+			for (let i = 1; i <= totalPages; i++) {
+				const button = $("#pageButton" + i);
+
+				if (i === page) {
+					button.addClass("active");
+				} else {
+					button.removeClass("active");
+				}
+			}
+
+			// Render movies for the current page
+			moviesToDisplay.forEach(function (movie, index) {
+				var movieCard = `
                     <div class="card">
                         <img src="${movie.poster}" alt="Movie Poster">
                         <h5 class="card-title">${movie.title}</h5>
@@ -565,16 +636,16 @@
                         </select>
                     </div>
                 `;
-                predictedMovies.append(movieCard);
-            });
-        }
+				predictedMovies.append(movieCard);
+			});
+		}
 
-        // Function to display movies
-        function displayMovies(movies) {
-            var predictedMovies = $('#predictedMovies');
-            predictedMovies.empty();
-            movies.forEach(function (movie, index) {
-                var movieCard = `
+		// Function to display movies
+		function displayMovies(movies) {
+			var predictedMovies = $("#predictedMovies");
+			predictedMovies.empty();
+			movies.forEach(function (movie, index) {
+				var movieCard = `
                     <div class="card">
                         <img src="${movie.poster}" alt="Movie Poster">
                         <h5 class="card-title">${movie.title}</h5>
@@ -603,104 +674,103 @@
                         </select>
                     </div>
                 `;
-                predictedMovies.append(movieCard);
+				predictedMovies.append(movieCard);
+			});
+		}
 
-            });
-        }
+		// Submit All Feedback Logic
+		$("#submitAllFeedback").click(function () {
+			var feedbackData = {};
+			$("#predictedMovies .card").each(function (index, card) {
+				var feedback = $(card).find(`#feedback-${index}`).val();
+				var movieTitle = $(card).find(".card-title").text();
 
-        // Submit All Feedback Logic
-        $('#submitAllFeedback').click(function () {
-            var feedbackData = {};
-            $('#predictedMovies .card').each(function (index, card) {
-                var feedback = $(card).find(`#feedback-${index}`).val();
-                var movieTitle = $(card).find('.card-title').text();
+				if (feedback) {
+					feedbackData[movieTitle] = feedback;
+				}
+			});
 
-                if (feedback) {
-                    feedbackData[movieTitle] = feedback;
-                }
-            });
+			// Submit all feedback at once
+			$.ajax({
+				type: "POST",
+				url: "/feedback",
+				dataType: "json",
+				contentType: "application/json;charset=UTF-8",
+				traditional: "true",
+				cache: false,
+				data: JSON.stringify(feedbackData),
+				success: function () {
+					alert("All feedback submitted successfully");
+				},
+				error: function (error) {
+					console.log("ERROR ->", error);
+					alert("Failed to submit feedback");
+				},
+			});
+		});
 
-            // Submit all feedback at once
-            $.ajax({
-                type: "POST",
-                url: "/feedback",
-                dataType: "json",
-                contentType: "application/json;charset=UTF-8",
-                traditional: "true",
-                cache: false,
-                data: JSON.stringify(feedbackData),
-                success: function () {
-                    alert("All feedback submitted successfully");
-                },
-                error: function (error) {
-                    console.log("ERROR ->", error);
-                    alert("Failed to submit feedback");
-                }
-            });
-        });
+		// Filtering Logic
+		$("#filterMovies").click(function () {
+			$("#predictedMovies").empty();
+			$("#predictedMovies").append(
+				`<div id="loadingMessage" style="color: #ebe5e6; font-size: 24px; font-weight: bold;">Loading...</div>`
+			);
+			$("#paginationButtons").empty();
+			const selectedGenres = $("#genre-select").val(); // Get selected genres
+			const minRating = parseFloat($("#rating-filter").val()); // Get minimum rating
 
-        // Filtering Logic
-        $('#filterMovies').click(function () {
-            $('#predictedMovies').empty();
-            $('#predictedMovies').append(`<div id="loadingMessage" style="color: #ebe5e6; font-size: 24px; font-weight: bold;">Loading...</div>`);
-            $('#paginationButtons').empty();
-            const selectedGenres = $('#genre-select').val(); // Get selected genres
-            const minRating = parseFloat($('#rating-filter').val()); // Get minimum rating
+			const filteredMovies = allPredictedMovies.filter((movie) => {
+				const genreMatch =
+					selectedGenres.length === 0 ||
+					selectedGenres.some((genre) => movie.genres.includes(genre));
+				const ratingMatch = isNaN(minRating) || movie.rating >= minRating;
+				return genreMatch && ratingMatch;
+			});
 
-            const filteredMovies = allPredictedMovies.filter(movie => {
-                const genreMatch = selectedGenres.length === 0 || selectedGenres.some(genre => movie.genres.includes(genre));
-                const ratingMatch = isNaN(minRating) || movie.rating >= minRating;
-                return genreMatch && ratingMatch;
-            });
+			displayMovies(filteredMovies);
+		});
 
-            displayMovies(filteredMovies);
-        });
+		function fetchYouTubeVideoLinks(movieTitle, cardBody) {
+			var request = gapi.client.youtube.search.list({
+				q: movieTitle + " official trailer",
+				part: "snippet",
+				type: "video",
+				maxResults: 1,
+			});
 
-        function fetchYouTubeVideoLinks(movieTitle, cardBody) {
+			request.execute(function (response) {
+				var videos = response.items;
 
-            var request = gapi.client.youtube.search.list({
-                q: movieTitle + ' official trailer',
-                part: 'snippet',
-                type: 'video',
-                maxResults: 1,
-            });
+				if (videos.length > 0) {
+					var trailersHeading = document.createElement("h5");
+					//trailersHeading.textContent = 'Trailers:';
+					cardBody.appendChild(trailersHeading);
 
-            request.execute(function (response) {
-                var videos = response.items;
+					var trailersList = document.createElement("ul");
 
-                if (videos.length > 0) {
-                    var trailersHeading = document.createElement('h5');
-                    //trailersHeading.textContent = 'Trailers:';
-                    cardBody.appendChild(trailersHeading);
+					videos.forEach(function (video) {
+						var videoId = video.id.videoId;
+						var videoLink = "https://www.youtube.com/watch?v=" + videoId;
 
-                    var trailersList = document.createElement('ul');
+						var trailerItem = document.createElement("a");
+						var youtubeLink = document.createElement("a");
+						youtubeLink.href = videoLink;
+						youtubeLink.target = "_blank";
+						youtubeLink.textContent = "Watch Trailer ";
 
-                    videos.forEach(function (video) {
-                        var videoId = video.id.videoId;
-                        var videoLink = 'https://www.youtube.com/watch?v=' + videoId;
+						trailerItem.appendChild(youtubeLink);
+						trailersList.appendChild(trailerItem);
+					});
 
+					cardBody.appendChild(trailersList);
+				}
+			});
+		}
 
-                        var trailerItem = document.createElement('a');
-                        var youtubeLink = document.createElement('a');
-                        youtubeLink.href = videoLink;
-                        youtubeLink.target = '_blank';
-                        youtubeLink.textContent = 'Watch Trailer ';
-
-                        trailerItem.appendChild(youtubeLink);
-                        trailersList.appendChild(trailerItem);
-                    });
-
-                    cardBody.appendChild(trailersList);
-                }
-            });
-        }
-
-        $('#refreshBtn').click(function() {
-                location.reload();  // This will refresh the whole page
-        });
-
-    });
-
+		$("#refreshBtn").click(function () {
+			location.reload(); // This will refresh the whole page
+		});
+	});
 </script>
 
 {% endblock %}
