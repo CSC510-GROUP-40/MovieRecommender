@@ -8,3 +8,20 @@
     background-color: rgba(255, 0, 0, 0.738);
     border-width: 0;
 }
+.auth-form{
+    max-width: 400px;
+}
+.alert-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1050; /* Ensure it stays above other elements */
+}
+.alert {
+    margin: 0; /* Remove margin for a flush top appearance */
+    border-radius: 0; /* Ensure it spans edge-to-edge */
+}
+body {
+    padding-top: 56px; /* Adjust padding to avoid content being hidden under the banner */
+}

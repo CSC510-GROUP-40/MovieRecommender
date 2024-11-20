@@ -18,22 +18,25 @@
         background-color: rgba(37, 19, 19, 0.708);
     }
  </style>
- <div class="form-container p-4 rounded">
-    <form action="/login" method="post" class="p-4 rounded shadow" style="width: 300px;">
-        <h2 class="auth-form-header text-center">Login</h2>
-        <div class="mb-3">
-            <label for="username" class="form-label text-white">Username</label>
-            <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required>
+ <div class="container-fluid d-flex justify-content-center align-items-center vh-100">
+    <div class="form-container p-4 rounded auth-form bg-dark text-white">
+        <form action="/login" method="post" class="p-4 rounded shadow bg-body-tertiary" style="width: 300px;">
+            <h2 class="auth-form-header text-center">Login</h2>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4 w-100">Login</button>
+        </form>
+        <div class="text-center mt-3">
+            <a href="{{ url_for('google_login') }}" class="text-white">Sign In With Google</a>
+            <p style="color:#ebe5e6; font-size: 15px; font-weight: bold;" class="my-4">New User? <a href="/register">Register here</a></p>
         </div>
-        <div class="mb-3">
-            <label for="password" class="form-label text-white">Password</label>
-            <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
-        </div>
-        <button type="submit" class="btn btn-primary mt-4 w-100">Login</button>
-    </form>
-    <div class="text-center">
-        <a href="{{url_for('google_login')}}" class="text-center text-white">Sign In With Google</a>
-        <p style="color:#ebe5e6; font-size: 15px; font-weight: bold;" class="my-4">New User? <a href="/register">Register here</a></p>
     </div>
 </div>
+
  {% endblock %}
