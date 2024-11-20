@@ -1,7 +1,7 @@
 
 {% extends 'layout.html' %}
 {% block styles %}
-
+<script src="https://apis.google.com/js/api.js"></script>
 <style>
     /* Navbar styles */
     .navbar {
@@ -168,127 +168,123 @@
 </style>
 {% endblock %}
 {% block content %}
-    <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: rgba(0, 0, 0, 0.5); height: 60px;">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand logo" href="{{ url_for('landing_page') }}" style="font-size: 24px; color: white; font-weight: bold;">Movie Recommender</a>
-            </div>
-    
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="{{ url_for('history') }}" class="btn header-btn">View History</a>
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgba(0, 0, 0, 0.5); height: 60px;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('landing_page') }}" style="font-size: 24px; font-weight: bold;">Movie Recommender</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a href="{{ url_for('history') }}" class="btn btn-outline-light">View History</a>
                 </li>
-                <li>
-                    <a href="{{ url_for('view_watchlist') }}" class="btn header-btn">Watchlist</a>
+                <li class="nav-item">
+                    <a href="{{ url_for('view_watchlist') }}" class="btn btn-outline-light">Watchlist</a>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle header-btn" data-toggle="dropdown">
-                        <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Profile"
-                            style="width: 30px; height: 30px; border-radius: 50%;">
-                        <span>{{ current_user.username }}</span>
-                        <b class="caret"></b>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Profile" class="rounded-circle" style="width: 30px; height: 30px;">
+                        {{ current_user.username }}
                     </a>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-header" >Welcome, {{ current_user.username }}</li>
-                        <li><a href="{{ url_for('profile') }}">Profile</a></li>
-                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><span class="dropdown-header">Welcome, {{ current_user.username }}</span></li>
+                        <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
                     </ul>
                 </li>
             </ul>
         </div>
-    </nav>
-    
-    <!-- Main Container -->
-    <div class="container" style="margin-top: 50px;">
-        <!-- Centered Search Bar and Refresh Button -->
-        <div class="row text-center" style="margin: 30px;">
-            <h2 style="color:#ebe5e6; font-size: 30px; font-weight: bold;">Search for Movies</h2>
-            <div class="col-md-8 col-md-offset-2" style="display: flex; align-items: center; justify-content: center;">
-               
-                <input type="text" name="search" id="searchBox" class="form-control"
-                    style="max-width: 500px;" placeholder="Search Here" />
-                <input type="button" class="btn btn-danger red-button" name="predict" id="predict" value="Predict"
-                style="margin-left: 15px; height: 60px;">
-                <!-- Refresh Button Right of Search Bar -->
-                <button class="btn red-button" id="refreshBtn" style="margin-left: 15px; height: 60px;">Refresh</button>
-            </div>
-        </div>
+    </div>
+</nav>
 
-        <!-- Filters Section -->
-        <div class="row" style="margin-top: 20px;">
-            <div class="col-md-6">
-                <label for="genre-select">Filter by Genres:</label>
-                <select id="genre-select" class="form-control" multiple>
-                    <option value="Action">Action</option>
-                    <option value="Adventure">Adventure</option>
-                    <option value="Comedy">Comedy</option>
-                    <option value="Drama">Drama</option>
-                    <option value="Horror">Horror</option>
-                    <option value="Romance">Romance</option>
-                    <option value="Sci-Fi">Sci-Fi</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="rating-filter">Filter by Rating (min):</label>
-                <input type="number" id="rating-filter" class="form-control" placeholder="Enter min rating (0-10)" min="0" max="10">
-            </div>
-        </div>
-        <div class="text-center" style="margin-top: 10px;">
-            <button class="btn btn-danger" id="filterMovies">Apply Filters</button>
-        </div>
 
-        <!-- Selected Movies and Predict Button -->
-        <div class="row" style="margin-top: 5px;">
-            <div class="col-md-10">
-                <h2 style="color:#ebe5e6; font-size: 24px; font-weight: bold;">Predicted Movies</h2>
-                <div class="scrollable-card-container">
-                    <div id="paginationButtons"></div>
-                    <div id="predictedMovies" class="card-container"></div>
-                </div>
+<!-- Main Container -->
+<div class="container my-5">
+    <!-- Centered Search Bar and Refresh Button -->
+    <div class="row text-center mb-4">
+        <h2 class="text-light fw-bold">Search for Movies</h2>
+        <div class="col-md-8 mx-auto d-flex justify-content-center align-items-center">
+            <input type="text" name="search" id="searchBox" class="form-control" style="max-width: 500px;" placeholder="Search Here" />
+            <input type="button" class="btn btn-danger ms-3" name="predict" id="predict" value="Predict" style="height: 60px;">
+            <button class="btn btn-danger ms-3" id="refreshBtn" style="height: 60px;">Refresh</button>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <label for="genre-select" class="form-label text-light">Filter by Genres:</label>
+            <select id="genre-select" class="form-control" multiple>
+                <option value="Action">Action</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Drama">Drama</option>
+                <option value="Horror">Horror</option>
+                <option value="Romance">Romance</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label for="rating-filter" class="form-label text-light">Filter by Rating (min):</label>
+            <input type="number" id="rating-filter" class="form-control" placeholder="Enter min rating (0-10)" min="0" max="10">
+        </div>
+    </div>
+    <div class="text-center mb-4">
+        <button class="btn btn-danger" id="filterMovies">Apply Filters</button>
+    </div>
+
+    <!-- Selected Movies and Predict Button -->
+    <div class="row">
+        <div class="col-md-10">
+            <h2 class="text-light fw-bold">Predicted Movies</h2>
+            <div class="scrollable-card-container">
+                <div id="paginationButtons"></div>
+                <div id="predictedMovies" class="card-container"></div>
             </div>
-            <div class="col-md-2">
-                <h2 style="color:#ebe5e6; font-size: 24px; font-weight: bold;">Selected Movies</h2>
-                <ul id="selectedMovies" class="list-unstyled">
-                    <div class="card-container" id="selectedMovies">
-                        {% for movie in training_data %}
-                        <div class="card">
-                            <h4>{{ movie.title }}</h4>
-                            <p>Rating: {{ movie.rating }}</p>
-                            <p>IMDb Rating: {{ movie.imdbRating }}</p>
-                        </div>
-                        {% endfor %}
+        </div>
+        <div class="col-md-2">
+            <h2 class="text-light fw-bold">Selected Movies</h2>
+            <ul id="selectedMovies" class="list-unstyled">
+                <div class="card-container">
+                    {% for movie in training_data %}
+                    <div class="card mb-2">
+                        <h5>{{ movie.title }}</h5>
+                        <p>Rating: {{ movie.rating }}</p>
+                        <p>IMDb Rating: {{ movie.imdbRating }}</p>
                     </div>
-                </ul>
-            </div>
-            <!-- Submit All Feedback Button (Initially hidden) -->
-            <div class="container text-center" style="margin-top: 20px;">
-                <button id="submitAllFeedback" class="btn btn-primary" style="display: none;">Submit Feedback</button>
-            </div>
+                    {% endfor %}
+                </div>
+            </ul>
         </div>
     </div>
 
-    <!-- Reviews Dialog (hidden initially) -->
-    <div id="reviewsDialog" title="Movie Reviews" style="display:none;">
-        <div id="reviewsContent">
-            <!-- Reviews content will be dynamically loaded here -->
-        </div>
-    </div>  
-
-    <!-- Streaming Platforms Dialog (hidden initially) -->
-    <div id="platformsDialog" title="Available Streaming Platforms" style="display:none;">
-        <div id="platformsContent" style="display: flex; justify-content: space-around;">
-            <!-- Streaming platform icons will be dynamically loaded here -->
-        </div>
+    <!-- Submit All Feedback Button -->
+    <div class="container text-center mb-4">
+        <button id="submitAllFeedback" class="btn btn-primary" style="display: none;">Submit Feedback</button>
     </div>
+</div>
 
-    <div id="dataCollected" class="container" style="display: none;">
-        <h1 style="color:#ebe5e6; font-size: 24px; font-weight: bold;">Thanks!! Your response was stored.</h1>
-        <input type="button" id="refreshPage" class="btn btn-danger" name="refreshPage" value="Take another attempt">
-    </div>
+<!-- Reviews Dialog (hidden initially) -->
+<div id="reviewsDialog" title="Movie Reviews" style="display:none;">
+    <div id="reviewsContent"></div>
+</div>
 
+<!-- Streaming Platforms Dialog (hidden initially) -->
+<div id="platformsDialog" title="Available Streaming Platforms" style="display:none;">
+    <div id="platformsContent" class="d-flex justify-content-around"></div>
+</div>
+
+<!-- Data Collected Message (hidden initially) -->
+<div id="dataCollected" class="container text-center" style="display: none;">
+    <h1 class="text-light fw-bold">Thanks! Your response was stored.</h1>
+    <input type="button" id="refreshPage" class="btn btn-danger" value="Take another attempt">
+</div>
    
 
 
+{% endblock %}
 
 
     {% block scripts %}
@@ -707,5 +703,4 @@
 
 </script>
 
-{% endblock %}
 {% endblock %}

@@ -22,6 +22,3 @@
     margin: 0; /* Remove margin for a flush top appearance */
     border-radius: 0; /* Ensure it spans edge-to-edge */
 }
-body {
-    padding-top: 56px; /* Adjust padding to avoid content being hidden under the banner */
-}
