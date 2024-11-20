@@ -1,58 +1,8 @@
 {% extends 'layout.html' %} {% block styles %}
 <script src="https://apis.google.com/js/api.js"></script>
 <style>
-	/* Navbar styles */
-	.navbar {
-		border-radius: 0;
-		height: 60px;
-		background-color: #d9534f !important; /* Force red color */
-		border: none; /* Remove any border */
-	}
 
-	.navbar .nav > li > a,
-	.navbar .nav > li > button {
-		color: white !important;
-		font-size: 16px;
-		padding: 15px 20px;
-		height: 100%;
-	}
-
-	.navbar .dropdown-menu {
-		background-color: #d9534f; /* Dropdown background color matching navbar */
-		color: white; /* Ensure text is white in the dropdown */
-		border: none;
-	}
-
-	.navbar .dropdown-menu > li > a {
-		color: white !important;
-		font-size: 16px;
-	}
-
-	.navbar .dropdown-menu > li.dropdown-header {
-		color: white;
-		font-size: 18px; /* Larger font size for username */
-		background-color: #d9534f; /* Ensure background matches navbar */
-		padding: 10px 20px; /* Add padding for a better look */
-	}
-
-	.navbar .dropdown-menu > li > a:hover {
-		background-color: rgba(0, 0, 0, 0.7) !important;
-	}
-
-	.navbar .header-btn {
-		height: 60px;
-		line-height: 30px;
-		display: flex;
-		align-items: center;
-	}
-
-	/* Dropdown toggle active (clicked) state */
-	.navbar .dropdown-toggle:active,
-	.navbar .dropdown-toggle:focus {
-		background-color: #d9534f !important; /* Red color when clicked */
-		color: white !important; /* Ensure the text color stays white */
-		border-color: transparent; /* Remove any border */
-	}
+	
 	.scrollable-card-container {
 		/* max-height: 1000px; */
 		max-width: 1000px;
@@ -169,69 +119,42 @@
 </style>
 {% endblock %} {% block content %}
 
-<nav
-	class="navbar navbar-expand-lg navbar-dark"
-	style="background-color: rgba(0, 0, 0, 0.5); height: 60px">
-	<div class="container-fluid">
-		<a
-			class="navbar-brand"
-			href="{{ url_for('landing_page') }}"
-			style="font-size: 24px; font-weight: bold"
-			>Movie Recommender</a
-		>
-		<button
-			class="navbar-toggler"
-			type="button"
-			data-bs-toggle="collapse"
-			data-bs-target="#navbarNav"
-			aria-controls="navbarNav"
-			aria-expanded="false"
-			aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarNav">
-			<ul class="navbar-nav ms-auto">
-				<li class="nav-item">
-					<a href="{{ url_for('history') }}" class="btn btn-outline-light"
-						>View History</a
-					>
-				</li>
-				<li class="nav-item">
-					<a href="{{ url_for('view_watchlist') }}" class="btn btn-outline-light"
-						>Watchlist</a
-					>
-				</li>
-				<li class="nav-item dropdown">
-					<a
-						class="nav-link dropdown-toggle"
-						href="#"
-						id="navbarDropdown"
-						role="button"
-						data-bs-toggle="dropdown"
-						aria-expanded="false">
-						<img
-							src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
-							alt="Profile"
-							class="rounded-circle"
-							style="width: 30px; height: 30px" />
-						{{ current_user.username }}
-					</a>
-					<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<li>
-							<span class="dropdown-header">Welcome, {{ current_user.username }}</span>
-						</li>
-						<li>
-							<a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a>
-						</li>
-						<li>
-							<a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
-						</li>
-					</ul>
-				</li>
-			</ul>
-		</div>
-	</div>
+<nav class="navbar navbar-expand-lg navbar-dark" style="padding: 15px;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('landing_page') }}" style="font-size: 20px; font-weight: bold;">Movie Recommender</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a href="{{ url_for('history') }}" class="btn btn-outline-light ms-2 me-2">View History</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('view_watchlist') }}" class="btn btn-outline-light ms-2 me-2">Watchlist</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Profile" class="rounded-circle" style="width: 30px; height: 30px" />
+                        {{ current_user.username }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li>
+                            <span class="dropdown-header">Welcome, {{ current_user.username }}</span>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
 </nav>
+
 
 <!-- Main Container -->
 <div class="container my-5">
