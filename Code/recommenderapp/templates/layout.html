@@ -30,6 +30,43 @@
             </div>
           </div>
         {% endif %}
+
+        <nav class="navbar navbar-expand-lg navbar-dark" style="padding: 15px;">
+          <div class="container-fluid">
+              <a class="navbar-brand" href="{{ url_for('landing_page') }}" style="font-size: 20px; font-weight: bold;">Movie Recommender</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                  <ul class="navbar-nav ms-auto">
+                      <li class="nav-item">
+                          <a href="{{ url_for('history') }}" class="btn btn-outline-light ms-2 me-2">View History</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="{{ url_for('view_watchlist') }}" class="btn btn-outline-light ms-2 me-2">Watchlist</a>
+                      </li>
+                      <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Profile" class="rounded-circle" style="width: 30px; height: 30px" />
+                              {{ current_user.username }}
+                          </a>
+                          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <li>
+                                  <span class="dropdown-header">Welcome, {{ current_user.username }}</span>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+                              </li>
+                          </ul>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </nav>
+      
     
 
     <div class="container-fluid">
