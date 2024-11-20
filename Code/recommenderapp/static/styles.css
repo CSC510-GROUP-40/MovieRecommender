@@ -31,3 +31,7 @@
     background-color: rgba(255, 0, 0, 0.738);
     padding: 10px;
 }
+
+.watchlist-card{
+    background-color: rgb(255, 255, 255);
+}
