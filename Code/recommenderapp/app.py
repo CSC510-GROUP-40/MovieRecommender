@@ -322,6 +322,47 @@ def logout():
     logout_user()
     return redirect(url_for('landing_page'))
 
+class Movie():
+    """
+    Class to represent a movie with its title, poster, rating, and genres.
+    
+    Attributes:
+        title (str): The title of the movie.
+        poster (str): The URL of the movie poster.
+        rating (float): The IMDb rating of the movie.
+        genres (str): The genres of the movie.
+        
+    Methods:
+        to_dict(self): Convert the movie object to a dictionary.
+    """
+    def __init__(self, title, poster, rating, genres):
+        """
+        Constructor for the Movie class.
+        
+        Args:
+            title (str): The title of the movie.
+            poster (str): The URL of the movie poster.
+            rating (float): The IMDb rating of the movie.
+            genres (str): The genres of the movie.
+        """
+        self.title = title
+        self.poster = poster
+        self.rating = rating
+        self.genres = genres
+    
+    def to_dict(self):
+        """
+        Convert the movie object to a dictionary.
+        
+        Output:
+            - A dictionary containing the movie's title, poster, rating, and genres.
+        """
+        return {
+            "title": self.title,
+            "poster": self.poster,
+            "rating": self.rating,
+            "genres": self.genres
+        }
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -335,45 +376,32 @@ def predict():
     # Get recommendations
     recommendations = recommendForNewUser(training_data)
     filtered_recommendations = []
-    movie_with_rating = {}
 
     # Process recommendations and only consider those with valid movie info
-    i = 1
+    print(f"Number of recommendations: {len(recommendations)}")
     for movie in recommendations:
-        if i > 10:  # Limit to 10 valid recommendations
-            break
 
         # Get movie information from OMDB or other source
         movie_info = get_movie_info(movie)
         if not movie_info:
             continue  # If no movie information, skip to the next
-        movie = movie_info["Title"]
 
-        # Check if the movie has valid IMDb rating, genre, and poster
-        if movie_info['imdbRating'] != 'N/A' and movie_info['Genre'] != 'N/A' and movie_info['Poster'] != 'N/A':
-            movie_with_rating[movie + "-c"] = movie_info['Reviews']
-            movie_with_rating[movie + "-s"] = movie_info['Platforms']
-            movie_with_rating[movie + "-r"] = movie_info['imdbRating']
-            movie_with_rating[movie + "-g"] = movie_info['Genre']
-            movie_with_rating[movie + "-p"] = movie_info['Poster']
+        # Add valid recommendation to filtered recommendations
+        filtered_recommendations.append(Movie(title=movie_info["Title"], 
+                                                poster=movie_info['Poster'], 
+                                                rating=movie_info['imdbRating'], 
+                                                genres=movie_info['Genre'])
+                                        .to_dict())
 
-            # Add valid recommendation to filtered recommendations
-            filtered_recommendations.append(movie)
-
-            # Save the recommendation to the database
-            new_recommendation = Recommendation(
-                user_id=current_user.id, movie_title=movie)
-            db.session.add(new_recommendation)
-
-            # Increment the count of valid recommendations
-            i += 1
+        # Save the recommendation to the database
+        new_recommendation = Recommendation(
+            user_id=current_user.id, movie_title=movie_info["Title"])
+        db.session.add(new_recommendation)
 
     db.session.commit()
 
-    resp = {
-        "recommendations": filtered_recommendations,
-        "rating": movie_with_rating}
-    return resp
+    # Return the filtered recommendations
+    return {"recommendations": filtered_recommendations}
 
 
 @app.route("/history")
@@ -386,46 +414,52 @@ def history():
         return render_template('history.html', recommendations=[])
     return render_template('history.html', recommendations=recommendations)
 
-
-def get_movie_info(title):
-    year = title[len(title) - 5:len(title) - 1]
-    title = format_title(title)
+def send_request_to_omdb(movie_title):
+    """
+    Send a request to OMDB for movie information.
+    
+    Args:
+        movie_title (str): The title of the movie.
+        
+    Returns:
+        - A dictionary containing the movie's title, poster, rating, and genres.
+    """
+    year = movie_title[len(movie_title) - 5:len(movie_title) - 1]
+    title = format_title(movie_title)
 
     url = f"http://www.omdbapi.com/?t={title}&apikey={OMDB_API_KEY}&y={year}"
     print(url)
 
     response = requests.get(url)
     if response.status_code == 200:
-        platforms = get_streaming_providers(title, TMDB_API_KEY)
-        movie_id = search_movie_tmdb(title, TMDB_API_KEY)
-        reviews = get_movie_reviews(movie_id, TMDB_API_KEY)
-
-        reviews_list = []
-        for review in reviews:
-            reviews_list.append(
-                {"author": review['author'], "content": review['content']})
-
-        res = response.json()
-        if res['Response'] == "True":
-            res = res | {'Platforms': platforms, 'Reviews': reviews_list}
-            return res
-        else:
-            return {
-                'Title': title,
-                'Platforms': "N/A",
-                'Reviews': "N/A",
-                'imdbRating': "N/A",
-                'Genre': 'N/A',
-                "Poster": "https://www.creativefabrica.com/wp-content/uploads/2020/12/29/Line-Corrupted-File-Icon-Office-Graphics-7428407-1.jpg"}
+        return response.json()
     else:
-        return {
-            'Title': title,
-            'Platforms': "N/A",
-            'Reviews': "N/A",
-            'imdbRating': "N/A",
-            'Genre': 'N/A',
-            "Poster": "https://www.creativefabrica.com/wp-content/uploads/2020/12/29/Line-Corrupted-File-Icon-Office-Graphics-7428407-1.jpg"}
+        return None
 
+def get_movie_info(title):
+    """
+    Get movie information from OMDB.
+    
+    Args:
+        title (str): The title of the movie.
+        
+    Returns:
+        - A dictionary containing the movie's information.
+    """
+
+    omdb_response = send_request_to_omdb(title)
+
+    if omdb_response:
+        # Check if the movie has valid IMDb rating, genre, and poster
+        if (
+            omdb_response['Response'] == "True"
+            and omdb_response['imdbRating'] != 'N/A'
+            and omdb_response['Genre'] != 'N/A'
+            and omdb_response['Poster'] != 'N/A'
+        ):
+            return omdb_response
+    
+    return None
 
 def format_title(movie_title):
     # Remove the year from the movie_title
@@ -581,11 +615,12 @@ def get_reviews(movie_title):
 
     if movie_id:
         reviews = get_movie_reviews(movie_id, TMDB_API_KEY)
-        reviews_list = [{"author": review['author'],
-                         "content": review['content']} for review in reviews]
-        return jsonify({"reviews": reviews_list})
-    else:
-        return jsonify({"reviews": []}), 404
+        if reviews:
+            reviews_list = [{"author": review['author'],
+                            "content": review['content']} for review in reviews]
+            return jsonify({"reviews": reviews_list})
+    
+    return jsonify({"reviews": []}), 404
 
 
 @app.route('/get_streaming_platforms/<movie_title>', methods=['GET'])

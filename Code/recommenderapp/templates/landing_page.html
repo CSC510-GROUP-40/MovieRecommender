@@ -91,6 +91,7 @@
             <div class="col-md-10">
                 <h2 style="color:#ebe5e6; font-size: 24px; font-weight: bold;">Predicted Movies</h2>
                 <div class="scrollable-card-container">
+                    <div id="paginationButtons"></div>
                     <div id="predictedMovies" class="card-container"></div>
                 </div>
             </div>
@@ -275,6 +276,28 @@
             height: 50px; /* Adjust the height */
             text-align: center;
         }
+
+        #paginationButtons button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            border: 1px solid #d9534f;
+            background-color: #d9534f;
+            color: #fff; /* White text */
+            font-size: 14px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #paginationButtons button:hover {
+            background-color: #fff; /* White background on hover */
+            color: #000; /* Black text on hover */
+        }
+
+        #paginationButtons button.active {
+            background-color: #fff; /* White background for active button */
+            color: #000; /* Black text for active button */
+            font-weight: bold;
+        }
     </style>
 
 </body>
@@ -388,6 +411,9 @@
     $(document).ready(function () {
         // Store predicted movies for filtering
         let allPredictedMovies = [];
+        // Global variables for pagination
+        const moviesPerPage = 5; // Number of movies per page
+        let totalPages = 0;
 
         function displayErrorMessage(message) {
             $('#errorMessageText').text(message);
@@ -439,6 +465,23 @@
             });
         });
 
+        // Function to create pagination buttons
+        function createPaginationButtons(numberOfMovies) {
+            const paginationContainer = $('#paginationButtons');
+            paginationContainer.empty();
+
+            totalPages = Math.ceil(numberOfMovies / moviesPerPage);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = $(`<button id="pageButton${i}">${i}</button>`);
+                button.click(function () {
+                    displayMoviesForPage(i);
+                });
+
+                paginationContainer.append(button);
+            }
+        }
+
         $("#predict").click(function () {
             var movie_list = [];
 
@@ -448,6 +491,11 @@
             });
 
             var movies = { "movie_list": movie_list };
+
+            // Clear previous predicted movies and show loading message
+            $('#predictedMovies').empty();
+            $('#predictedMovies').append(`<div id="loadingMessage" style="color: #ebe5e6; font-size: 24px; font-weight: bold;">Loading...</div>`);
+            $('#paginationButtons').empty();
 
             $.ajax({
                 type: "POST",
@@ -462,14 +510,15 @@
                     predictedMovies.empty();
 
                     // Store all predicted movies for filtering later
-                    allPredictedMovies = response['recommendations'].map((element, index) => ({
-                        title: element,
-                        poster: response['rating'][element + '-p'],
-                        rating: parseFloat(response['rating'][element + '-r']),
-                        genres: response['rating'][element + '-g'],
-                    }));
+                    allPredictedMovies = response['recommendations'];
                     
-                    displayMovies(allPredictedMovies);
+                    // displayMovies(allPredictedMovies);
+
+                    // Create pagination buttons
+                    createPaginationButtons(allPredictedMovies.length);
+
+                    // Initialize and display the first page of movies
+                    displayMoviesForPage(1);
                     
                     $("#submitAllFeedback").show();
                 },
@@ -478,6 +527,63 @@
                 }
             });
         });
+
+        // TODO: how to maintain the filter functionality for pagination
+        // Function to display movies for a specific page
+        function displayMoviesForPage(page) {
+            const predictedMovies = $('#predictedMovies');
+            predictedMovies.empty();
+
+            const startIndex = (page - 1) * moviesPerPage;
+            const endIndex = startIndex + moviesPerPage;
+
+            const moviesToDisplay = allPredictedMovies.slice(startIndex, endIndex);
+
+            // Update button states
+            for (let i = 1; i <= totalPages; i++) {
+                const button = $('#pageButton' + i);
+                
+                if (i === page) {
+                    button.addClass('active');
+                } else {
+                    button.removeClass('active');
+                }
+            }
+
+            // Render movies for the current page
+            moviesToDisplay.forEach(function (movie, index) {
+                var movieCard = `
+                    <div class="card">
+                        <img src="${movie.poster}" alt="Movie Poster">
+                        <h5 class="card-title">${movie.title}</h5>
+                        <p class="card-text">IMDb Rating: ${movie.rating}</p>
+                        <p class="card-text">Genre: ${movie.genres}</p>
+                        
+                        <!-- Watchlist Button -->
+                        <form action="/add_to_watchlist" method="POST">
+                            <input type="hidden" name="movie_title" value="${movie.title}">
+                            <input type="hidden" name="imdb_rating" value="${movie.rating}">
+                            <button type="submit" class="btn btn-primary">Add to Watchlist</button>
+                        </form>
+
+                        <!-- Reviews -->
+                        <button class="btn btn-primary" id="reviews-button-${index}" onclick="showReviews('${movie.title}')">Check Reviews</button>
+                        
+                        <!-- Check Streaming Platforms Button -->
+                        <button class="btn btn-primary" id="platforms-button-${index}" onclick="showStreamingPlatforms('${movie.title}', ${index})">\Streaming Platforms</button>
+
+                        <!-- Feedback -->
+                        <label for="feedback-${index}">Feedback:</label>
+                        <select class="form-control" id="feedback-${index}">
+                            <option value="Yet to Watch" style="font-size: 10px;">Yet to Watch</option>
+                            <option value="Like" style="font-size: 10px;">Like</option>
+                            <option value="Dislike" style="font-size: 10px;">Dislike</option>
+                        </select>
+                    </div>
+                `;
+                predictedMovies.append(movieCard);
+            });
+        }
 
         // Function to display movies
         function displayMovies(movies) {
@@ -551,6 +657,9 @@
 
         // Filtering Logic
         $('#filterMovies').click(function () {
+            $('#predictedMovies').empty();
+            $('#predictedMovies').append(`<div id="loadingMessage" style="color: #ebe5e6; font-size: 24px; font-weight: bold;">Loading...</div>`);
+            $('#paginationButtons').empty();
             const selectedGenres = $('#genre-select').val(); // Get selected genres
             const minRating = parseFloat($('#rating-filter').val()); // Get minimum rating
 
