@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: rgba(0, 0, 0, 0.5); height: 60px;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand logo" href="{{ url_for('landing_page') }}" style="font-size: 24px; color: white; font-weight: bold;">Movie Recommender</a>
+            </div>
+    
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="{{ url_for('history') }}" class="btn header-btn">View History</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('view_watchlist') }}" class="btn header-btn">Watchlist</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle header-btn" data-toggle="dropdown">
+                        <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Profile"
+                            style="width: 30px; height: 30px; border-radius: 50%;">
+                        <span>{{ current_user.username }}</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-header">Welcome, {{ current_user.username }}</li>
+                        <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h2>User Profile</h2>
+
+        <!-- Basic Information -->
+        <div class="profile-info">
+            <h3>Basic Information</h3>
+            <p><strong>Name:</strong> {{ current_user.username }}</p>
+            <p><strong>Email:</strong> {{ current_user.email }}</p>
+            <p><strong>Favorite Genres:</strong> {{ current_user.favorite_genres }}</p>
+            <button class="btn btn-red" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
+        </div>
+
+        <!-- Account Settings -->
+        <div class="account-settings">
+            <h3>Account Settings</h3>
+            <button class="btn btn-red" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
+        </div>
+
+        <!-- Activity Info -->
+        <div class="activity-info">
+            <h3>Activity</h3>
+            <p><strong>Movies in Watchlist:</strong> {{ watchlist_count }}</p>
+            <p><strong>Total Recommended Movies:</strong> {{ rec_movies_count }}</p>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{{ url_for('edit_profile') }}" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="favoriteGenres">Favorite Genres:</label>
+                        <input type="text" id="favoriteGenres" name="favorite_genres" class="form-control" value="{{ current_user.favorite_genres }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-red" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-red">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{{ url_for('change_password') }}" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="newPassword" style="margin-top: 10px;">New Password:</label>
+                        <input type="password" id="newPassword" name="new_password" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-red" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-red">Change Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+</body>
+</html>
