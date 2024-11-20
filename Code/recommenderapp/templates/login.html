@@ -1,63 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-    <style>
-        body {
+
+
+ {% extends 'layout.html' %}
+ {% block content %}
+ <style>
+    body {
         position: relative;
         background: url("https://wallpaperaccess.com/full/8212583.jpg") no-repeat center center fixed;
-        background-size: 170%; /* Zoom in the background */
+        background-size: cover; /* Zoom in the background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
     }
 
-    body::before {
-        content: "";
-        position: absolute;
-        background: url("https://wallpaperaccess.com/full/8212583.jpg");
-        opacity: 0.5;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
-        z-index: -1;
+    .form-container{
+        background-color: rgba(37, 19, 19, 0.708);
     }
-
-    .form-container {
-        position: relative;
-        z-index: 1;
-        margin: 50px auto; /* Center the form on the page */
-        width: 300px; /* Adjust width as per your design */
-        padding: 20px;
-        background-color: rgba(255, 255, 255, 0.8); /* Optional: for better visibility */
-        border-radius: 8px;
-    }
-
-    /* Style inputs and buttons */
-    .form-container input,
-    .form-container .red-button {
-        width: 100%; /* Full width */
-        margin-bottom: 10px; /* Spacing between elements */
-    }
-
-        .red-button {
-            background-color: #d9534f;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            text-decoration: none;
-            font-size: 18px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <div class="form-container">
-        <form action="/login" method="post">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit" class="red-button">Login</button>
-        </form>
-        <a href="{{url_for('google_login')}}">Sign In With Google</a>
+ </style>
+ <div class="form-container p-4 rounded">
+    <form action="/login" method="post" class="p-4 rounded shadow" style="width: 300px;">
+        <div class="mb-3">
+            <label for="username" class="form-label text-white">Username</label>
+            <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label text-white">Password</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-4 w-100">Login</button>
+    </form>
+    <div class="text-center">
+        <a href="{{url_for('google_login')}}" class="text-center text-white">Sign In With Google</a>
     </div>
-</body>
-</html>
+</div>
+ {% endblock %}
