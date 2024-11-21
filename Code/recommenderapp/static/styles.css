@@ -1,0 +1,37 @@
+.auth-form-header{
+    color: rgba(255, 0, 0, 0.738);
+    text-transform: uppercase;
+}
+
+.btn-primary{
+    color: white;
+    background-color: rgba(255, 0, 0, 0.738);
+    border-width: 0;
+}
+.auth-form{
+    max-width: 400px;
+}
+.alert-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1050; /* Ensure it stays above other elements */
+}
+.alert {
+    margin: 0; /* Remove margin for a flush top appearance */
+    border-radius: 0; /* Ensure it spans edge-to-edge */
+}
+
+.ui-autocomplete{
+    background-color: rgba(0, 0, 0, 0.9) ;
+    max-width: 500px
+}
+.navbar{
+    background-color: rgba(255, 0, 0, 0.738);
+    padding: 10px;
+}
+
+.watchlist-card{
+    background-color: rgb(255, 255, 255);
+}
