@@ -35,7 +35,7 @@ from prediction_scripts.item_based import recommendForNewUser
 from prediction_scripts.search import Search
 from prediction_scripts.filter import Filter
 from prediction_scripts.tmdb_utils import get_movie_reviews, get_streaming_providers, search_movie_tmdb
-load_dotenv()
+load_dotenv('.env.example')
 LOGGER = logging.getLogger(__name__)
 
 
