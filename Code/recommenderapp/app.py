@@ -177,6 +177,7 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('landing_page'))
     error = None
+    code = 200
     if request.method == 'POST':
         username = request.form.get('username')
         email = request.form.get('email')
@@ -188,8 +189,10 @@ def register():
 
         if existing_user:
             error = 'Username is already taken. Please choose a different one.'
+            code = 400
         elif existing_email:
             error = 'Email is already registered. Please choose a different one.'
+            code = 400
         else:
             # If username and email are not taken, proceed with registration
             user = User(username=username, email=email)
@@ -201,7 +204,7 @@ def register():
             login_user(user)
             return redirect(url_for('landing_page'))
 
-    return render_template('register.html', error=error)
+    return render_template('register.html', error=error), code
 
 
 @app.route("/login/callback", methods=['GET'])
@@ -323,7 +326,7 @@ def google_login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('landing_page'))
+    return redirect(url_for('login'))
 
 class Movie():
     """
