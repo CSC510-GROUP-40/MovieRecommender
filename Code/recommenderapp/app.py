@@ -341,7 +341,7 @@ class Movie():
     Methods:
         to_dict(self): Convert the movie object to a dictionary.
     """
-    def __init__(self, title, poster, rating, genres):
+    def __init__(self, title, poster, rating, genres, actors, imdb_id):
         """
         Constructor for the Movie class.
         
@@ -355,6 +355,8 @@ class Movie():
         self.poster = poster
         self.rating = rating
         self.genres = genres
+        self.actors = actors
+        self.imdb_id = imdb_id
     
     def to_dict(self):
         """
@@ -367,7 +369,9 @@ class Movie():
             "title": self.title,
             "poster": self.poster,
             "rating": self.rating,
-            "genres": self.genres
+            "genres": self.genres,
+            "actors": self.actors,
+            "imdb_id": self.imdb_id
         }
 
 @app.route("/predict", methods=["POST"])
@@ -396,7 +400,9 @@ def predict():
         filtered_recommendations.append(Movie(title=movie_info["Title"], 
                                                 poster=movie_info['Poster'], 
                                                 rating=movie_info['imdbRating'], 
-                                                genres=movie_info['Genre'])
+                                                genres=movie_info['Genre'],
+                                                actors=movie_info['Actors'],
+                                                imdb_id=movie_info['imdbID'])
                                         .to_dict())
 
         # Save the recommendation to the database
@@ -462,6 +468,8 @@ def get_movie_info(title):
             and omdb_response['imdbRating'] != 'N/A'
             and omdb_response['Genre'] != 'N/A'
             and omdb_response['Poster'] != 'N/A'
+            and omdb_response['Actors'] != 'N/A'
+            and omdb_response['imdbID'] != 'N/A'
         ):
             return omdb_response
     
