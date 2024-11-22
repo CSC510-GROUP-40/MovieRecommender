@@ -35,7 +35,7 @@ jobs:
           pip install pytest-cov coveralls
           pip install coverage
           pip install -r requirements.txt
-          cp .env.example .env
+          cp Code/recommenderapp/.env.example Code/recommenderapp/.env
           echo requirements installed
 
       - name: Run tests with Coverage
