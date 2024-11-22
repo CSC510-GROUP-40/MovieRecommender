@@ -35,7 +35,7 @@ from prediction_scripts.item_based import recommendForNewUser
 from prediction_scripts.search import Search
 from prediction_scripts.filter import Filter
 from prediction_scripts.tmdb_utils import get_movie_reviews, get_streaming_providers, search_movie_tmdb
-load_dotenv('.env.example')
+load_dotenv()
 LOGGER = logging.getLogger(__name__)
 
 
@@ -316,7 +316,7 @@ def google_login():
     # construct request for google login and specify the fields on the account
     request_uri = app.oauthclient.prepare_request_uri(
         authorization_endpoint,
-        redirect_uri=app.config['GOOGLE_SIGN_IN_REDIRECT_URI'],
+        redirect_uri= app.config['GOOGLE_SIGN_IN_REDIRECT_URI'],
         scope=["openid", "email", "profile"],
     )
     return redirect(request_uri)

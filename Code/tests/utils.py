@@ -71,13 +71,18 @@ def client():
     """Create a test client and initialize database."""
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    
     oauthclient = OAuth()
+    
     app.oauthclient = oauthclient
    
     app.app_context().push()
     client = app.test_client()
     with app.app_context():
         db.create_all()
+        app.config.update({
+        'GOOGLE_SIGN_IN_REDIRECT_URI': "https://accounts.google.com/.well-known/openid-configuration"
+        })
         yield client
         db.session.remove()
         db.drop_all()
