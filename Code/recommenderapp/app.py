@@ -330,18 +330,21 @@ def logout():
 
 class Movie():
     """
-    Class to represent a movie with its title, poster, rating, and genres.
+    Class to represent a movie with its title, poster, rating, genres, cast, IMDb ID, and plot.
     
     Attributes:
         title (str): The title of the movie.
         poster (str): The URL of the movie poster.
         rating (float): The IMDb rating of the movie.
         genres (str): The genres of the movie.
+        cast (str): The cast of the movie.
+        imdb_id (str): The IMDb ID of the movie.
+        plot (str): The plot of the movie.
         
     Methods:
         to_dict(self): Convert the movie object to a dictionary.
     """
-    def __init__(self, title, poster, rating, genres, actors, imdb_id):
+    def __init__(self, title, poster, rating, genres, cast, imdb_id, plot):
         """
         Constructor for the Movie class.
         
@@ -350,28 +353,33 @@ class Movie():
             poster (str): The URL of the movie poster.
             rating (float): The IMDb rating of the movie.
             genres (str): The genres of the movie.
+            cast (str): The cast of the movie.
+            imdb_id (str): The IMDb ID of the movie.
+            plot (str): The plot of the movie.
         """
         self.title = title
         self.poster = poster
         self.rating = rating
         self.genres = genres
-        self.actors = actors
+        self.cast = cast
         self.imdb_id = imdb_id
+        self.plot = plot
     
     def to_dict(self):
         """
         Convert the movie object to a dictionary.
         
         Output:
-            - A dictionary containing the movie's title, poster, rating, and genres.
+            - A dictionary containing the movie's title, poster, rating, genres, cast, IMDb ID, and plot.
         """
         return {
             "title": self.title,
             "poster": self.poster,
             "rating": self.rating,
             "genres": self.genres,
-            "actors": self.actors,
-            "imdb_id": self.imdb_id
+            "cast": self.cast,
+            "imdb_id": self.imdb_id,
+            "plot": self.plot
         }
 
 @app.route("/predict", methods=["POST"])
@@ -401,8 +409,9 @@ def predict():
                                                 poster=movie_info['Poster'], 
                                                 rating=movie_info['imdbRating'], 
                                                 genres=movie_info['Genre'],
-                                                actors=movie_info['Actors'],
-                                                imdb_id=movie_info['imdbID'])
+                                                cast=movie_info['Actors'],
+                                                imdb_id=movie_info['imdbID'],
+                                                plot=movie_info['Plot'])
                                         .to_dict())
 
         # Save the recommendation to the database
@@ -434,7 +443,7 @@ def send_request_to_omdb(movie_title):
         movie_title (str): The title of the movie.
         
     Returns:
-        - A dictionary containing the movie's title, poster, rating, and genres.
+        - A dictionary containing the movie's information retrieved from OMDB.
     """
     year = movie_title[len(movie_title) - 5:len(movie_title) - 1]
     title = format_title(movie_title)
@@ -470,6 +479,7 @@ def get_movie_info(title):
             and omdb_response['Poster'] != 'N/A'
             and omdb_response['Actors'] != 'N/A'
             and omdb_response['imdbID'] != 'N/A'
+            and omdb_response['Plot'] != 'N/A'
         ):
             return omdb_response
     

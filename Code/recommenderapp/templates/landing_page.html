@@ -562,9 +562,11 @@
                         <h5 class="card-title">${movie.title}</h5>
                         <p class="card-text">IMDb Rating: ${movie.rating}</p>
                         <p class="card-text">Genre: ${movie.genres}</p>
-						<p class="card-text">Actors: ${movie.actors}</p>
-						<p class="card-text">More info: <a href="https://www.imdb.com/title/${movie.imdb_id}" target="_blank">IMDb link</a></p><p class="card-text"></p>
-                        
+						<p class="card-text">Cast: ${movie.cast}</p>
+						<p class="card-text">Plot: ${movie.plot}</p>
+						<a href="https://www.imdb.com/title/${movie.imdb_id}" role="button" target="_blank"><button class="btn btn-primary" >IMDb link</button></a>
+  
+
                         <!-- Watchlist Button -->
                         <form action="/add_to_watchlist" method="POST">
                             <input type="hidden" name="movie_title" value="${movie.title}">
