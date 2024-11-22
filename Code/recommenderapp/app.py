@@ -177,6 +177,7 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('landing_page'))
     error = None
+    code = 200
     if request.method == 'POST':
         username = request.form.get('username')
         email = request.form.get('email')
@@ -188,8 +189,10 @@ def register():
 
         if existing_user:
             error = 'Username is already taken. Please choose a different one.'
+            code = 400
         elif existing_email:
             error = 'Email is already registered. Please choose a different one.'
+            code = 400
         else:
             # If username and email are not taken, proceed with registration
             user = User(username=username, email=email)
@@ -201,7 +204,7 @@ def register():
             login_user(user)
             return redirect(url_for('landing_page'))
 
-    return render_template('register.html', error=error)
+    return render_template('register.html', error=error), code
 
 
 @app.route("/login/callback", methods=['GET'])
@@ -209,7 +212,7 @@ def google_loign_callback():
     '''
     handle callback data from google oauth and login user
     '''
-
+    status_code = 200
     try:
         # Get authorization code from url returned by google
         code = request.args.get("code")
@@ -237,7 +240,7 @@ def google_loign_callback():
         userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
         uri, headers, body = app.oauthclient.add_token(userinfo_endpoint)
         userinfo_response = requests.get(uri, headers=headers, data=body)
-        LOGGER.error("okay of me to es")
+       
         if userinfo_response.json().get("email_verified"):
             unique_id = userinfo_response.json()["sub"]
             user_email = userinfo_response.json()["email"]
@@ -264,10 +267,12 @@ def google_loign_callback():
         else:
             LOGGER.info("email not verified")
             error = "User email not available or not verified by Google."  # , 400
-        return render_template('login.html', error=error)
+            status_code = 400
+        return render_template('login.html', error=error), status_code
     except Exception as e:
         LOGGER.error(f"error occured {e}")
-        return render_template('login.html', error="an error occured please try again later")
+        status_code = 400
+        return render_template('login.html', error="an error occured please try again later"), status_code
 
 
 
@@ -285,12 +290,13 @@ def login():
         password = request.form.get('password')
         user = User.query.filter_by(
             username=username).first()  # 'user' is now defined here
-
         if user is None or not user.check_password(password):
             error = 'Invalid username or password'
+            code =  400
+            return render_template('login.html', error=error), code
         else:
             login_user(user)
-            return redirect(url_for('landing_page'))
+            return redirect(url_for('landing_page')), 302
 
     # If we reach this point without returning, 'user' was not assigned due to a POST
     # Or there was an error in login, handle accordingly
@@ -310,7 +316,7 @@ def google_login():
     # construct request for google login and specify the fields on the account
     request_uri = app.oauthclient.prepare_request_uri(
         authorization_endpoint,
-        redirect_uri=app.config['GOOGLE_SIGN_IN_REDIRECT_URI'],
+        redirect_uri= app.config['GOOGLE_SIGN_IN_REDIRECT_URI'],
         scope=["openid", "email", "profile"],
     )
     return redirect(request_uri)
@@ -320,7 +326,7 @@ def google_login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('landing_page'))
+    return redirect(url_for('login'))
 
 class Movie():
     """
