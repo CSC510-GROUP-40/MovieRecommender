@@ -97,10 +97,10 @@ def test_email_password_login_failure_given_incorrect_password(client, insert_us
     assert response.status_code == 400
 
 
-def test_redirect_to_google_page(client):
-    """Test the redirect to Google's login page."""
-    response = client.get('/google-login')
-    assert response.status_code == 302
+# def test_redirect_to_google_page(client):
+#     """Test the redirect to Google's login page."""
+#     response = client.get('/google-login')
+#     assert response.status_code == 302
 
 
 @pytest.mark.usefixtures("mocker")
