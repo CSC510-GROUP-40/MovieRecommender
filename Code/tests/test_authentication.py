@@ -5,22 +5,6 @@ sys.path.append('../recommenderapp')
 from recommenderapp.app import app, db, User
 
 
-# @pytest.fixture
-# def client():
-#     """Create a test client and initialize database."""
-#     app.config['TESTING'] = True
-#     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-#     #oauthclient = OAuth()
-#     #app.oauthclient = oauthclient
-    
-#     app.app_context().push()
-#     client = app.test_client()
-#     with app.app_context():
-#         db.create_all()
-#     yield client
-#     with app.app_context():
-#         db.session.remove()
-#         db.drop_all()
 
 
 def register(client, username, email, password):
