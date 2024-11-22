@@ -31,7 +31,6 @@ def logout(client):
 
 def test_register_new_user(client):
     """Test registering a new user."""
-    # response = register(client, "newuser", "newuser@example.com", "password123")
     response = client.post('/register', data={
         'username': "newuser",
         'email': "newuser@example.com",
