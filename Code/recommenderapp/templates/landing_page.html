@@ -468,7 +468,7 @@
 		});
 
 		// Function to create pagination buttons
-		function createPaginationButtons(numberOfMovies) {
+		function createPaginationButtons(numberOfMovies, movies) {
 			const paginationContainer = $("#paginationButtons");
 			paginationContainer.empty();
 
@@ -477,7 +477,7 @@
 			for (let i = 1; i <= totalPages; i++) {
 				const button = $(`<button id="pageButton${i}">${i}</button>`);
 				button.click(function () {
-					displayMoviesForPage(i);
+					displayMoviesForPage(i, movies);
 				});
 
 				paginationContainer.append(button);
@@ -519,10 +519,10 @@
 					// displayMovies(allPredictedMovies);
 
 					// Create pagination buttons
-					createPaginationButtons(allPredictedMovies.length);
+					createPaginationButtons(allPredictedMovies.length, allPredictedMovies);
 
 					// Initialize and display the first page of movies
-					displayMoviesForPage(1);
+					displayMoviesForPage(1, allPredictedMovies);
 
 					$("#submitAllFeedback").show();
 				},
@@ -534,14 +534,14 @@
 
 		// TODO: how to maintain the filter functionality for pagination
 		// Function to display movies for a specific page
-		function displayMoviesForPage(page) {
+		function displayMoviesForPage(page, movies) {
 			const predictedMovies = $("#predictedMovies");
 			predictedMovies.empty();
 
 			const startIndex = (page - 1) * moviesPerPage;
 			const endIndex = startIndex + moviesPerPage;
 
-			const moviesToDisplay = allPredictedMovies.slice(startIndex, endIndex);
+			const moviesToDisplay = movies.slice(startIndex, endIndex);
 
 			// Update button states
 			for (let i = 1; i <= totalPages; i++) {
@@ -606,45 +606,7 @@
 				predictedMovies.append(movieCard);
 			});
 		}
-
-		// Function to display movies
-		function displayMovies(movies) {
-			var predictedMovies = $("#predictedMovies");
-			predictedMovies.empty();
-			movies.forEach(function (movie, index) {
-				var movieCard = `
-                    <div class="card">
-                        <img src="${movie.poster}" alt="Movie Poster">
-                        <h5 class="card-title">${movie.title}</h5>
-                        <p class="card-text">IMDb Rating: ${movie.rating}</p>
-                        <p class="card-text">Genre: ${movie.genres}</p>
-                        
-                        <!-- Watchlist Button -->
-                        <form action="/add_to_watchlist" method="POST">
-                            <input type="hidden" name="movie_title" value="${movie.title}">
-                            <input type="hidden" name="imdb_rating" value="${movie.rating}">
-                            <button type="submit" class="btn btn-primary">Add to Watchlist</button>
-                        </form>
-
-                        <!-- Reviews -->
-                        <button class="btn btn-primary" id="reviews-button-${index}" onclick="showReviews('${movie.title}')">Check Reviews</button>
-                        
-                        <!-- Check Streaming Platforms Button -->
-                        <button class="btn btn-primary" id="platforms-button-${index}" onclick="showStreamingPlatforms('${movie.title}', ${index})">\Streaming Platforms</button>
-
-                        <!-- Feedback -->
-                        <label for="feedback-${index}">Feedback:</label>
-                        <select class="form-control" id="feedback-${index}">
-                            <option value="Yet to Watch" style="font-size: 10px;">Yet to Watch</option>
-                            <option value="Like" style="font-size: 10px;">Like</option>
-                            <option value="Dislike" style="font-size: 10px;">Dislike</option>
-                        </select>
-                    </div>
-                `;
-				predictedMovies.append(movieCard);
-			});
-		}
-
+		
 		// Submit All Feedback Logic
 		$("#submitAllFeedback").click(function () {
 			var feedbackData = {};
@@ -694,7 +656,11 @@
 				return genreMatch && ratingMatch;
 			});
 
-			displayMovies(filteredMovies);
+			// Create pagination buttons
+			createPaginationButtons(filteredMovies.length, filteredMovies);
+
+			// Initialize and display the first page of movies
+			displayMoviesForPage(1, filteredMovies);
 		});
 
 		function fetchYouTubeVideoLinks(movieTitle, cardBody) {
