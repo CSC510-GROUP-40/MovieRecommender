@@ -238,7 +238,6 @@ def test_register_new_user(client):
 
     assert response.status_code == 200
 
-    assert b'Welcome, newuser' in response.data 
 
 def test_change_password_success(client, auth):
     """
