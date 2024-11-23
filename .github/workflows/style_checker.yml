@@ -1,0 +1,7 @@
+on: push
+name: STYLE CHECKER
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: andymckay/pycodestyle-action@0.1.3

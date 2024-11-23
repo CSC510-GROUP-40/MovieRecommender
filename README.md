@@ -10,6 +10,8 @@ Your movie night assistant powered by collaborative filtering recommendations!
 [![Python application](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/python-app.yml/badge.svg)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/python-app.yml)
 [![pylint](https://img.shields.io/badge/PyLint-6.51-orange?logo=python&logoColor=white)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/runs/11983553237)
 [![autopep8](./autopep8.svg)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/runs/11983553237)
+[![Syntax Checker](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/syntax_checker.yml/badge.svg)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/syntax_checker.yml)
+[![Style Checker](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/style_checker.yml/badge.svg)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/style_checker.yml)
 [![Tests On Push](http://github.com/VibhavDeo/MovieRecommender/actions/workflows/unit_test.yml/badge.svg)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/unit_test.yml)
 [![Coverage Status](https://coveralls.io/repos/github/CSC510-GROUP-40/MovieRecommender/badge.svg?branch=develop-test)](https://coveralls.io/github/CSC510-GROUP-40/MovieRecommender?branch=develop-test)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/VibhavDeo/MovieRecommender)
