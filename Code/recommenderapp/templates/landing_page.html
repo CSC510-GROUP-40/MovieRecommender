@@ -558,17 +558,21 @@
 			moviesToDisplay.forEach(function (movie, index) {
 				var movieCard = `
                     <div class="card">
-    <img src="${movie.poster}" alt="Movie Poster">
-    <h5 class="card-title">${movie.title}</h5>
-    <p class="card-text">IMDb Rating: ${movie.rating}</p>
-    <p class="card-text">Genre: ${movie.genres}</p>
+                        <img src="${movie.poster}" alt="Movie Poster">
+                        <h5 class="card-title">${movie.title}</h5>
+                        <p class="card-text">IMDb Rating: ${movie.rating}</p>
+                        <p class="card-text">Genre: ${movie.genres}</p>
+						<p class="card-text">Cast: ${movie.cast}</p>
+						<p class="card-text">Plot: ${movie.plot}</p>
+						<a href="https://www.imdb.com/title/${movie.imdb_id}" role="button" target="_blank"><button class="btn btn-primary" >IMDb link</button></a>
+  
 
-    <!-- Watchlist Button -->
-    <form action="/add_to_watchlist" method="POST">
-        <input type="hidden" name="movie_title" value="${movie.title}">
-        <input type="hidden" name="imdb_rating" value="${movie.rating}">
-        <button type="submit" class="btn btn-primary">Add to Watchlist</button>
-    </form>
+                        <!-- Watchlist Button -->
+                        <form action="/add_to_watchlist" method="POST">
+                            <input type="hidden" name="movie_title" value="${movie.title}">
+                            <input type="hidden" name="imdb_rating" value="${movie.rating}">
+                            <button type="submit" class="btn btn-primary">Add to Watchlist</button>
+                        </form>
 
     <!-- Reviews -->
     <button class="btn btn-primary" id="reviews-button-${index}" onclick="showReviews('${movie.title}')">Check Reviews</button>
