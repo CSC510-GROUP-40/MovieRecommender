@@ -176,7 +176,7 @@ You can use below information for copyright.
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
-  - names: Sravya Yepuri, Chirag Hegde, Melika Ahmadi Ranjbar
+  - names: Habib Mohammed, Lingjun Liu, Lawrence Arkoh
 title: "MovieRecommender"
 version: "1.0.0"
 date-released: "2024-11-01"
