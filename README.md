@@ -8,7 +8,7 @@ Your movie night assistant powered by collaborative filtering recommendations!
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/CSC510-GROUP-40/MovieRecommender/develop-test)
 [![CI Actions](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/ci.yml/badge.svg)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/ci.yml)
-[![pylint](https://img.shields.io/badge/PyLint-6.51-orange?logo=python&logoColor=white)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/runs/11983553237)
+[![pylint](https://img.shields.io/badge/PyLint-6.54-orange?logo=python&logoColor=white)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/runs/11983553237)
 [![autopep8](./autopep8.svg)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/runs/11983553237)
 [![Syntax Checker](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/syntax_checker.yml/badge.svg)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/syntax_checker.yml)
 [![Style Checker](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/style_checker.yml/badge.svg)](https://github.com/CSC510-GROUP-40/MovieRecommender/actions/workflows/style_checker.yml)
