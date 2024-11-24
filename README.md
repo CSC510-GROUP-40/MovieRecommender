@@ -16,18 +16,18 @@ Your movie night assistant powered by collaborative filtering recommendations!
 
 ## Skip the endless scroll, Filmfy has your next movie pick ready!
 
-Are you spending more time picking a movie than actually watching one? Let Filmfy solve your movie-night dilemma! Just let us know your preferences, and Filmfy will recommend must-watch movies tailored just for you. 🍿🎬<br><br>
+Elevate your movie nights with Filmify, the app that knows your taste! Get personalized movie recommendations based on what you love, explore films across all genres and ratings, and enjoy trailers, reviews, and streaming options—all tailored just for you. Build your own watchlist to share or keep, and refine your experience with feedback. With a sleek design and seamless features, Filmify turns every movie search into a cinematic adventure! 🍿🎬<br><br>
 <img width="400" height="250" alt="movie night" src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzI4bnR0dnFlM3A4NWg1MDdodHdjZmg3YzBvbGEyZnVxa253Zmw4biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3orifa5dm56tdCdAIM/giphy.gif" />
 
 # <b>Table of Contents</b>
 
-- [Filmfy 🍿](#Filmfy-)
-  - [Skip the endless scroll, Filmfy has your next movie pick ready!](#skip-the-endless-scroll-Filmfy-has-your-next-movie-pick-ready)
+- [Filmfy 🍿](#filmfy-)
+  - [Skip the endless scroll, Filmfy has your next movie pick ready!](#skip-the-endless-scroll-filmfy-has-your-next-movie-pick-ready)
 - [Table of Contents](#table-of-contents)
   - [Overview 👁️](#overview-️)
   - [Exciting Future Plans 🔮](#exciting-future-plans-)
   - [Demo Video ▶️](#demo-video-️)
-  - [How Filmfy Works 📱](#how-Filmfy-works-)
+  - [How Filmfy Works 📱](#how-filmfy-works-)
   - [Tech Stack 👨‍💻](#tech-stack-)
   - [Setup and Installation ⚙️](#setup-and-installation-️)
     - [Install Dependencies](#install-dependencies)
