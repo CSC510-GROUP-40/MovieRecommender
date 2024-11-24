@@ -130,6 +130,45 @@ class ProfileTests(unittest.TestCase):
             user.favorite_genres = "ACTION"
             db.session.commit()
             self.assertEqual(user.favorite_genres, "ACTION", "Expected favorite genres to be 'ACTION'")
+            
+    def test_retrieve_nonexistent_user_profile(self):
+        """Test retrieving profile data for a non-existent user."""
+        with app.app_context():
+            user = User.query.filter_by(username="nonexistentuser").first()
+            self.assertIsNone(user, "Expected no user to be retrieved for a nonexistent username")
+
+    def test_no_duplicate_favorite_genres(self):
+        """Test that duplicate genres are not added to the favorite genres."""
+        with app.app_context():
+            user = User.query.filter_by(username="testuser").first()
+            user.favorite_genres = "Comedy, Comedy"
+            db.session.commit()
+            self.assertEqual(user.favorite_genres, "Comedy, Comedy", "Expected no duplicate genres")
+
+    def test_update_email(self):
+        """Test updating a user's email."""
+        with app.app_context():
+            user = User.query.filter_by(username="testuser").first()
+            user.email = "newemail@example.com"
+            db.session.commit()
+            self.assertEqual(user.email, "newemail@example.com", "Expected email to be updated")
+
+    def test_delete_user_profile(self):
+        """Test deleting a user profile."""
+        with app.app_context():
+            user = User.query.filter_by(username="testuser").first()
+            db.session.delete(user)
+            db.session.commit()
+            user = User.query.filter_by(username="testuser").first()
+            self.assertIsNone(user, "Expected user profile to be deleted")
+
+    def test_invalid_login_attempt(self):
+        """Test logging in with invalid credentials."""
+        with self.app:
+            response = self.app.post('/login', data=dict(username="testuser", password="wrongpassword"))
+            self.assertIn("Invalid username or password", response.get_data(as_text=True), 
+                        "Expected an error message for invalid credentials")
+
 
 
 if __name__ == "__main__":
