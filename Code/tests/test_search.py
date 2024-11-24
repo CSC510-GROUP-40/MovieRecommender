@@ -125,6 +125,78 @@ class Tests(unittest.TestCase):
             filtered_dict == expected_resp,
             "Search term with Unicode characters should result in an empty list of results")
 
+    def testSearchMixedCase(self):
+        search_word = "ToY"
+        search = Search()
+        filtered_dict = search.resultsTop10(search_word)
+        expected_resp = [
+            "Toy Story (1995)",
+            "Toys (1992)",
+            "Toy Story 2 (1999)",
+            "Toy, The (1982)",
+            "Toy Soldiers (1991)",
+            "Toy Story 3 (2010)",
+            "Babes in Toyland (1961)",
+            "Babes in Toyland (1934)",
+        ]
+        self.assertTrue(filtered_dict == expected_resp, "Search should be case-insensitive")
+
+    def testSearchNonEnglish(self):
+        search_word = "toyá"  # Adding an accent mark to the word
+        search = Search()
+        filtered_dict = search.resultsTop10(search_word)
+        expected_resp = []
+        self.assertTrue(filtered_dict == expected_resp, "Search with non-English characters should result in an empty list or a specific behavior")
+
+    def testSearchMultipleWords(self):
+        search_word = "toy story"
+        search = Search()
+        filtered_dict = search.resultsTop10(search_word)
+        expected_resp = [
+            "Toy Story (1995)",
+            "Toy Story 2 (1999)",
+            "Toy Story 3 (2010)",
+        ]
+        self.assertTrue(filtered_dict == expected_resp, "Search with multiple words should return correct results")
+        
+    def testSearchWithNonAlphanumeric(self):
+        search_word = "toy123!"
+        search = Search()
+        filtered_dict = search.resultsTop10(search_word)
+        expected_resp = []
+        self.assertTrue(
+            filtered_dict == expected_resp,
+            "Search with non-alphanumeric characters should result in an empty list or a specific behavior"
+        )
+    
+    def testSearchSpecialRegexCharacters(self):
+        search_word = "(toy)"
+        search = Search()
+        filtered_dict = search.resultsTop10(search_word)
+        expected_resp = []
+        self.assertTrue(
+            filtered_dict == expected_resp,
+            "Search with special regex characters should be escaped or handled correctly"
+        )
+
+
+    def testSearchStopWords(self):
+        search_word = "the"
+        search = Search()
+        filtered_dict = search.resultsTop10(search_word)
+        expected_resp = []  # Typically, these should not return results if they are treated as stop words
+        self.assertFalse(filtered_dict == expected_resp, "Search with common stop words should return no results or a specific behavior")
+
+    def testSearchVeryLongTerm(self):
+        search_word = "toy" * 1000  # Long string with repeated characters
+        search = Search()
+        filtered_dict = search.resultsTop10(search_word)
+        expected_resp = []
+        self.assertTrue(
+            filtered_dict == expected_resp,
+            "Search with a very long term should return no results or be handled efficiently"
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
