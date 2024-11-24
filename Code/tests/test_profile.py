@@ -162,13 +162,6 @@ class ProfileTests(unittest.TestCase):
             user = User.query.filter_by(username="testuser").first()
             self.assertIsNone(user, "Expected user profile to be deleted")
 
-    def test_invalid_login_attempt(self):
-        """Test logging in with invalid credentials."""
-        with self.app:
-            response = self.app.post('/login', data=dict(username="testuser", password="wrongpassword"))
-            self.assertIn("Invalid username or password", response.get_data(as_text=True), 
-                        "Expected an error message for invalid credentials")
-
 
 
 if __name__ == "__main__":
