@@ -78,6 +78,8 @@ Filmfy does more than just recommend movies. Here’s what’s under the hood:
 - Suggests trailers for your top recommendations so you can preview before you watch. 
 - Learns from feedback and improves recommendations with time.
 - Lets you create an account, track movie history, add to watchlist, edit profile, and refine your recommendations.
+- Share your favourtie movies with your friends on other social media platforms like Facebook, Twitter and Whatsapp
+- Let's you sign in with your google account so you don't need to remember several passwords.
 
 ![Watching Movies](https://media.giphy.com/media/f9k1tV7HyORcngKF8v/giphy.gif)
 
