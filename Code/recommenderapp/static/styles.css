@@ -35,3 +35,7 @@
 .watchlist-card{
     background-color: rgb(255, 255, 255);
 }
+
+.ui-helper-hidden-accessible{
+    display:none !important;
+}
