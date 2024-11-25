@@ -152,6 +152,13 @@
 		border-radius: 5px;
 		padding: 5px;
 	}
+
+	.modal-body{
+		color: black;
+	}
+	.review-title{
+		color: black;
+	}
 </style>
 {% endblock %} {% block content %}
 
@@ -253,10 +260,23 @@
 </div>
 
 <!-- Reviews Dialog (hidden initially) -->
-<div id="reviewsDialog" title="Movie Reviews" style="display: none">
-	<div id="reviewsContent"></div>
-</div>
-
+<div class="modal fade" id="reviewsDialog" tabindex="-1" aria-labelledby="reviewsDialogLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="review-title" id="reviewsDialogLabel">Movie Reviews</h5>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body" id="reviewsContent">
+		  <!-- Content  -->
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+  
 <!-- Streaming Platforms Dialog (hidden initially) -->
 <div
 	id="platformsDialog"
@@ -301,26 +321,24 @@
 			url: `/get_reviews/${encodeURIComponent(movieTitle)}`, // Fetch reviews from the backend
 			success: function (response) {
 				var reviewsHtml = "";
+
+				// Loop through the reviews and generate HTML content
 				response.reviews.forEach(function (review) {
 					reviewsHtml += `<p><strong>${review.author}</strong>: ${review.content}</p>`;
 				});
 
+				// Handle the case where there are no reviews
 				if (reviewsHtml === "") {
 					reviewsHtml = "<p>No reviews available for this movie.</p>";
 				}
 
-				$("#reviewsContent").html(reviewsHtml); // Update the dialog content with reviews
+				// Update the modal content
+				$("#reviewsContent").html(reviewsHtml);
 
-				// Open the dialog box with jQuery UI
-				$("#reviewsDialog").dialog({
-					modal: true,
-					width: 600,
-					buttons: {
-						Close: function () {
-							$(this).dialog("close");
-						},
-					},
-				});
+				// Show the modal
+				$('#reviewsDialog').modal('show');
+
+				
 			},
 			error: function (error) {
 				console.log("Error fetching reviews:", error);
