@@ -1,4 +1,4 @@
-# <i>StreamR 🍿</i>
+# <i>Filmfy 🍿</i>
 Your movie night assistant powered by collaborative filtering recommendations!
 
 [![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)](https://github.com/Shravsssss)
@@ -15,20 +15,20 @@ Your movie night assistant powered by collaborative filtering recommendations!
 [![Coverage Status](https://coveralls.io/repos/github/CSC510-GROUP-40/MovieRecommender/badge.svg?branch=develop)](https://coveralls.io/github/CSC510-GROUP-40/MovieRecommender?branch=develop)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/CSC510-GROUP-40/MovieRecommender)
 
-## Skip the endless scroll, StreamR has your next movie pick ready!
+## Skip the endless scroll, Filmfy has your next movie pick ready!
 
-Are you spending more time picking a movie than actually watching one? Let StreamR solve your movie-night dilemma! Just let us know your preferences, and StreamR will recommend must-watch movies tailored just for you. 🍿🎬<br><br>
+Elevate your movie nights with Filmify, the app that knows your taste! Get personalized movie recommendations based on what you love, explore films across all genres and ratings, and enjoy trailers, reviews, and streaming options—all tailored just for you. Build your own watchlist to share or keep, and refine your experience with feedback. With a sleek design and seamless features, Filmify turns every movie search into a cinematic adventure! 🍿🎬<br><br>
 <img width="400" height="250" alt="movie night" src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzI4bnR0dnFlM3A4NWg1MDdodHdjZmg3YzBvbGEyZnVxa253Zmw4biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3orifa5dm56tdCdAIM/giphy.gif" />
 
 # <b>Table of Contents</b>
 
-- [StreamR 🍿](#streamr-)
-  - [Skip the endless scroll, StreamR has your next movie pick ready!](#skip-the-endless-scroll-streamr-has-your-next-movie-pick-ready)
+- [Filmfy 🍿](#filmfy-)
+  - [Skip the endless scroll, Filmfy has your next movie pick ready!](#skip-the-endless-scroll-filmfy-has-your-next-movie-pick-ready)
 - [Table of Contents](#table-of-contents)
   - [Overview 👁️](#overview-️)
   - [Exciting Future Plans 🔮](#exciting-future-plans-)
   - [Demo Video ▶️](#demo-video-️)
-  - [How StreamR Works 📱](#how-streamr-works-)
+  - [How Filmfy Works 📱](#how-filmfy-works-)
   - [Tech Stack 👨‍💻](#tech-stack-)
   - [Setup and Installation ⚙️](#setup-and-installation-️)
     - [Install Dependencies](#install-dependencies)
@@ -43,15 +43,15 @@ Are you spending more time picking a movie than actually watching one? Let Strea
 
 ## Overview 👁️
 
-Welcome to StreamR! 🚀<br>
+Welcome to Filmfy! 🚀<br>
 Let us handle the hard part of picking a movie. Just provide your movie titles, and we'll curate a list of top recommendations perfect for your taste! 📽️<br>
-Save time and make every movie night a hit. StreamR delivers recommendations based on your unique preferences so you can focus on the popcorn! 🍿<br>
+Save time and make every movie night a hit. Filmfy delivers recommendations based on your unique preferences so you can focus on the popcorn! 🍿<br>
 Start your next great movie experience with a single click. 🎉<br><br>
 ![Choosing a Movie](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExcm9maXZxMDMxcGF5MDRvM3k4em5kaTRjMmFoam5pNmlzZ3NieTFvaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Sb7WSbjHFNIL6/giphy.gif)
 
 ## Exciting Future Plans 🔮
 
-Our vision for StreamR includes:
+Our vision for Filmfy includes:
 
 1. Introducing more diverse genre, rating based recommendations.
 2. Emailing users their latest recommendations for easy access.
@@ -60,25 +60,27 @@ Our vision for StreamR includes:
 5. Add a subscribe option so that users can get emails according to their profile whenever a new movie is released.
 6. Add an option for creating groups with shared watchlists.
 
-StreamR can also be continuously tested with GitHub Actions, keeping our codebase rock-solid! 💪
+Filmfy can also be continuously tested with GitHub Actions, keeping our codebase rock-solid! 💪
 
 ## Demo Video ▶️ 
 
-Get a sneak peek of StreamR in action! Click the link to watch the demo.
+Get a sneak peek of Filmfy in action! Click the link to watch the demo.
 
 [Watch the animated video here](https://github.com/user-attachments/assets/0363fddc-0874-42bb-8e1b-e38a962394fa)
 
 [Watch the demo video here](https://youtu.be/sNsCvfMRBTI)
 
-## How StreamR Works 📱
+## How Filmfy Works 📱
 
-StreamR does more than just recommend movies. Here’s what’s under the hood:
+Filmfy does more than just recommend movies. Here’s what’s under the hood:
 
 - Analyzes movie characteristics like genre and user reviews to make informed suggestions.
 - Combines movie features and user preferences using machine learning for truly personalized picks.
 - Suggests trailers for your top recommendations so you can preview before you watch. 
 - Learns from feedback and improves recommendations with time.
 - Lets you create an account, track movie history, add to watchlist, edit profile, and refine your recommendations.
+- Share your favourtie movies with your friends on other social media platforms like Facebook, Twitter and Whatsapp
+- Let's you sign in with your google account so you don't need to remember several passwords.
 
 ![Watching Movies](https://media.giphy.com/media/f9k1tV7HyORcngKF8v/giphy.gif)
 
@@ -106,7 +108,7 @@ JavaScript adds interactivity to our app, giving users a seamless experience.
 
 ## Setup and Installation ⚙️
 
-To get started with StreamR:
+To get started with Filmfy:
 
 - Python 3.5+
 - pip
@@ -158,7 +160,7 @@ for ssl to work locally on google chrome, you will have to do the following sett
 ![Starting App](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXhqdHRreDQ5NGd2MmY3NjB5dGhlbjNuNWU0MXlib3Q4bXp3eGxzayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2IudUHdI075HL02Pkk/giphy.gif)
 
 ## Documentation 📚
-Check out the [Wiki documentation](https://github.com/Shravsssss/MovieRecommender/wiki) for detailed information on how StreamR works and how to contribute.
+Check out the [Wiki documentation](https://github.com/Shravsssss/MovieRecommender/wiki) for detailed information on how Filmfy works and how to contribute.
 
 
 
@@ -166,8 +168,8 @@ Check out the [Wiki documentation](https://github.com/Shravsssss/MovieRecommende
 We’d love to hear from you! Please [open an issue](https://github.com/Shravsssss/MovieRecommender/issues) if you find any bugs or have feature requests.
 
 ## License 📃
-StreamR is open-source under the MIT License.
-- We chose the MIT license to promote freedom and flexibility for you to adapt StreamR to your needs.
+Filmfy is open-source under the MIT License.
+- We chose the MIT license to promote freedom and flexibility for you to adapt Filmfy to your needs.
 - Enjoy, share, and contribute back to the community!
 
 ## Copyright
@@ -177,7 +179,7 @@ You can use below information for copyright.
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
-  - names: Sravya Yepuri, Chirag Hegde, Melika Ahmadi Ranjbar
+  - names: Habib Mohammed, Lingjun Liu, Lawrence Arkoh
 title: "MovieRecommender"
 version: "1.0.0"
 date-released: "2024-11-01"
