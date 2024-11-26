@@ -1,4 +1,4 @@
-# Filmfy
+# Filmify
 
 # Version: 1.0.0
 # Date Released: 2024-11-01
