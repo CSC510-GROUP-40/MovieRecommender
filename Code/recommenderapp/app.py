@@ -384,46 +384,64 @@ class Movie():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    data = json.loads(request.data)  # contains movies
-    data1 = data["movie_list"]
-    training_data = []
-    for movie in data1:
-        movie_with_rating = {"title": movie, "rating": 5.0}
-        training_data.append(movie_with_rating)
+    """
+    Predict movie recommendations for a user.
+    
+    Args:
+        - request (flask.Request): The request object containing the user's movie preferences.
+        
+    Returns:
+        - A list of dictionaries, where each dictionary contains information about a recommended movie.
+    """
+    if not current_user.is_authenticated:
+        print("User is not authenticated")
+        return render_template('login.html'), 401
+    
+    try: 
+        data = json.loads(request.data)  # contains movies
+        data1 = data["movie_list"]
+        training_data = []
+        for movie in data1:
+            movie_with_rating = {"title": movie, "rating": 5.0}
+            training_data.append(movie_with_rating)
 
-    # Get recommendations
-    recommendations = recommendForNewUser(training_data)
-    filtered_recommendations = []
+        # Get recommendations
+        recommendations = recommendForNewUser(training_data)
+        filtered_recommendations = []
 
-    # Process recommendations and only consider those with valid movie info
-    print(f"Number of recommendations: {len(recommendations)}")
-    for movie in recommendations:
+        # Process recommendations and only consider those with valid movie info
+        print(f"Number of recommendations: {len(recommendations)}")
+        try:
+            for movie in recommendations:
 
-        # Get movie information from OMDB or other source
-        movie_info = get_movie_info(movie)
-        if not movie_info:
-            continue  # If no movie information, skip to the next
+                # Get movie information from OMDB or other source
+                movie_info = get_movie_info(movie)
+                if not movie_info:
+                    continue  # If no movie information, skip to the next
 
-        # Add valid recommendation to filtered recommendations
-        filtered_recommendations.append(Movie(title=movie_info["Title"], 
-                                                poster=movie_info['Poster'], 
-                                                rating=movie_info['imdbRating'], 
-                                                genres=movie_info['Genre'],
-                                                cast=movie_info['Actors'],
-                                                imdb_id=movie_info['imdbID'],
-                                                plot=movie_info['Plot'])
-                                        .to_dict())
+                # Add valid recommendation to filtered recommendations
+                filtered_recommendations.append(Movie(title=movie_info["Title"], 
+                                                        poster=movie_info['Poster'], 
+                                                        rating=movie_info['imdbRating'], 
+                                                        genres=movie_info['Genre'],
+                                                        cast=movie_info['Actors'],
+                                                        imdb_id=movie_info['imdbID'],
+                                                        plot=movie_info['Plot'])
+                                                .to_dict())
+                # Save the recommendation to the database
+                new_recommendation = Recommendation(
+                    user_id=current_user.id, movie_title=movie_info["Title"])
+                db.session.add(new_recommendation)
 
-        # Save the recommendation to the database
-        new_recommendation = Recommendation(
-            user_id=current_user.id, movie_title=movie_info["Title"])
-        db.session.add(new_recommendation)
+            db.session.commit()
+        except Exception as e:
+            return jsonify({"error": e.__str__()}), 500
 
-    db.session.commit()
+        # Return the filtered recommendations
+        return {"recommendations": filtered_recommendations}
 
-    # Return the filtered recommendations
-    return {"recommendations": filtered_recommendations}
-
+    except Exception as e:
+        return jsonify({"error": e.__str__()}), 400
 
 @app.route("/history")
 @login_required
