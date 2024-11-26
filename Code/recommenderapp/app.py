@@ -491,13 +491,13 @@ def get_movie_info(title):
     if omdb_response:
         # Check if the movie has valid IMDb rating, genre, and poster
         if (
-            omdb_response['Response'] == "True"
-            and omdb_response['imdbRating'] != 'N/A'
-            and omdb_response['Genre'] != 'N/A'
-            and omdb_response['Poster'] != 'N/A'
-            and omdb_response['Actors'] != 'N/A'
-            and omdb_response['imdbID'] != 'N/A'
-            and omdb_response['Plot'] != 'N/A'
+            omdb_response.get('Response') == "True"
+            and omdb_response.get('imdbRating') != 'N/A'
+            and omdb_response.get('Genre') != 'N/A'
+            and omdb_response.get('Poster') != 'N/A'
+            and omdb_response.get('Actors') != 'N/A'
+            and omdb_response.get('imdbID') != 'N/A'
+            and omdb_response.get('Plot') != 'N/A'
         ):
             return omdb_response
     

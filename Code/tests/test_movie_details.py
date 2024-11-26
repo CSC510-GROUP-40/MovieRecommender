@@ -107,7 +107,7 @@ class MovieDetailsTests(unittest.TestCase):
             'imdbRating': '8.8',
             'Genre': 'Action, Adventure, Sci-Fi',
             'Poster': 'some_poster_url',
-            # 'Actors' field is missing
+            'Actors': 'N/A',  # Missing cast information
             'imdbID': 'tt1375666',
             'Plot': 'A thief who steals corporate secrets...',
             'Response': 'True'
