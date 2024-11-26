@@ -1,3 +1,9 @@
+# Link to demo/walkthrough video:
+
+https://drive.google.com/file/d/1BLah62sXaM-t3jWGpha7uTXTZg4mPlSx/view?usp=sharing
+<br>
+<br>
+
 # <i>Filmfy 🍿</i>
 Your movie night assistant powered by collaborative filtering recommendations!
 
