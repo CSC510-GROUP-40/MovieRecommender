@@ -1,6 +1,6 @@
 ## Contributing
 
-[fork]: https://github.com/Shravsssss/MovieRecommender/fork
+[fork]: https://github.com/CSC510-GROUP-40/MovieRecommenderfork
 [pr]: https://github.com/ebanigogia/MovieRecommender/compare
 [style]: https://pep8.org/
 [code-of-conduct]: CODE_OF_CONDUCT.md
