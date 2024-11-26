@@ -384,6 +384,19 @@ class Movie():
 
 @app.route("/predict", methods=["POST"])
 def predict():
+    """
+    Predict movie recommendations for a user.
+    
+    Args:
+        - request (flask.Request): The request object containing the user's movie preferences.
+        
+    Returns:
+        - A list of dictionaries, where each dictionary contains information about a recommended movie.
+    """
+    if not current_user.is_authenticated:
+        print("User is not authenticated")
+        return render_template('login.html'), 401
+    
     data = json.loads(request.data)  # contains movies
     data1 = data["movie_list"]
     training_data = []
