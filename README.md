@@ -1,9 +1,3 @@
-# Link to demo/walkthrough video:
-
-https://drive.google.com/file/d/1BLah62sXaM-t3jWGpha7uTXTZg4mPlSx/view?usp=sharing
-<br>
-<br>
-
 # <i>Filmfy 🍿</i>
 Your movie night assistant powered by collaborative filtering recommendations!
 
@@ -72,9 +66,9 @@ Filmfy can also be continuously tested with GitHub Actions, keeping our codebase
 
 Get a sneak peek of Filmfy in action! Click the link to watch the demo.
 
-[Watch the animated video here](https://github.com/user-attachments/assets/0363fddc-0874-42bb-8e1b-e38a962394fa)
+[![Watch the animated video here](https://img.youtube.com/vi/ce6-fG9PLKw/hqdefault.jpg)](https://youtu.be/ce6-fG9PLKw)
 
-[Watch the demo video here](https://youtu.be/sNsCvfMRBTI)
+[Watch the demo video here](https://drive.google.com/file/d/1BLah62sXaM-t3jWGpha7uTXTZg4mPlSx/view?usp=sharing)
 
 ## How Filmfy Works 📱
 
