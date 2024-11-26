@@ -152,6 +152,13 @@
 		border-radius: 5px;
 		padding: 5px;
 	}
+
+	.modal-body{
+		color: black;
+	}
+	.review-title{
+		color: black;
+	}
 </style>
 {% endblock %} {% block content %}
 
@@ -253,17 +260,48 @@
 </div>
 
 <!-- Reviews Dialog (hidden initially) -->
-<div id="reviewsDialog" title="Movie Reviews" style="display: none">
-	<div id="reviewsContent"></div>
-</div>
-
+<div class="modal fade" id="reviewsDialog" tabindex="-1" aria-labelledby="reviewsDialogLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="review-title" id="reviewsDialogLabel">Movie Reviews</h5>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body" id="reviewsContent">
+		  <!-- Content  -->
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+  
 <!-- Streaming Platforms Dialog (hidden initially) -->
-<div
+<!-- <div
 	id="platformsDialog"
 	title="Available Streaming Platforms"
 	style="display: none">
 	<div id="platformsContent" class="d-flex justify-content-around"></div>
-</div>
+</div> -->
+<!-- Modal Structure -->
+<div class="modal fade" id="platformsDialog" tabindex="-1" aria-labelledby="platformsDialogLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="review-title" id="platformsDialogLabel">Available Streaming Platforms</h5>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body d-flex justify-content-around" id="platformsContent">
+		  <!-- Platforms content will go here -->
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+  
 
 <!-- Data Collected Message (hidden initially) -->
 <div id="dataCollected" class="container text-center" style="display: none">
@@ -301,26 +339,24 @@
 			url: `/get_reviews/${encodeURIComponent(movieTitle)}`, // Fetch reviews from the backend
 			success: function (response) {
 				var reviewsHtml = "";
+
+				// Loop through the reviews and generate HTML content
 				response.reviews.forEach(function (review) {
 					reviewsHtml += `<p><strong>${review.author}</strong>: ${review.content}</p>`;
 				});
 
+				// Handle the case where there are no reviews
 				if (reviewsHtml === "") {
 					reviewsHtml = "<p>No reviews available for this movie.</p>";
 				}
 
-				$("#reviewsContent").html(reviewsHtml); // Update the dialog content with reviews
+				// Update the modal content
+				$("#reviewsContent").html(reviewsHtml);
 
-				// Open the dialog box with jQuery UI
-				$("#reviewsDialog").dialog({
-					modal: true,
-					width: 600,
-					buttons: {
-						Close: function () {
-							$(this).dialog("close");
-						},
-					},
-				});
+				// Show the modal
+				$('#reviewsDialog').modal('show');
+
+				
 			},
 			error: function (error) {
 				console.log("Error fetching reviews:", error);
@@ -354,29 +390,26 @@
 
 				// Check if platforms are available in the response
 				if (response.length === 0) {
-					// If no platforms are available, show message
+					// If no platforms are available, show a message
 					streamingHtml = "<p>This movie is not available in the US region.</p>";
 				} else {
 					// Only show the first four platforms
 					var platforms = response.slice(0, 4);
 					platforms.forEach(function (platform) {
-						streamingHtml += `<img src="${platform.logo}" alt="${platform.name}" style="width: 50px; height: 50px;">`;
+						streamingHtml += `
+							<div class="text-center">
+								<img src="${platform.logo}" alt="${platform.name}" style="width: 50px; height: 50px;">
+								<p>${platform.name}</p>
+							</div>`;
 					});
 				}
 
-				// Insert streaming platforms or message into the dialog content
+				// Insert streaming platforms or the message into the modal content
 				$("#platformsContent").html(streamingHtml);
 
-				// Open the dialog box with jQuery UI
-				$("#platformsDialog").dialog({
-					modal: true,
-					width: 600,
-					buttons: {
-						Close: function () {
-							$(this).dialog("close");
-						},
-					},
-				});
+				// Show the Bootstrap modal
+				$('#platformsDialog').modal('show');
+
 			},
 			error: function (error) {
 				console.log("Error fetching streaming platforms:", error);

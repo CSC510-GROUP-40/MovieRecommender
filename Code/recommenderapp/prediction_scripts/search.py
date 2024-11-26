@@ -1,8 +1,8 @@
-# StreamR
+# Filmfy
 
 # Version: 1.0.0
 # Date Released: 2024-11-01
-# Authors: Sravya Yepuri, Chirag Hegde, Melika Ahmadi Ranjbar
+# Authors: Habib Mohammed, Lingjun Liu, Lawrence Arkoh
 
 # Licensed under the MIT License.
 # You may obtain a copy of the License at
@@ -60,6 +60,3 @@ class Search:
     def resultsTop10(self, word):
         return self.results(word)[:10]
 
-
-if __name__ == "__main__":
-    app.run()
