@@ -211,6 +211,69 @@ class TestTMDBFunctions(unittest.TestCase):
 
         reviews = get_movie_reviews(12345, self.TMDB_API_KEY)
         self.assertIsNone(reviews, "Expected None due to API failure")
+        
+    @patch('requests.get')
+    def test_search_movie_tmdb_missing_api_key(self, mock_get):
+        """
+        Test search_movie_tmdb with a missing API key, expecting None to be returned.
+        """
+        with self.assertRaises(TypeError, msg="Expected TypeError for missing API key"):
+            search_movie_tmdb("Inception")  # No API key provided
+
+    @patch('requests.get')
+    def test_get_streaming_providers_no_connection(self, mock_get):
+        """
+        Test get_streaming_providers with no internet connection, expecting None.
+        """
+        
+        providers = get_streaming_providers(12345, self.TMDB_API_KEY)
+        self.assertIsNone(providers, "Expected None due to no internet connection")
+
+    @patch('requests.get')
+    def test_get_movie_reviews_unexpected_response_structure(self, mock_get):
+        """
+        Test get_movie_reviews with an unexpected JSON response structure,
+        expecting an empty list to be returned.
+        """
+        # Mock a response with an unexpected structure
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = {"unexpected_key": []}
+
+        reviews = get_movie_reviews(12345, self.TMDB_API_KEY)
+        self.assertEqual(
+            reviews,
+            [],
+            "Expected empty list for unexpected response structure")
+
+    @patch('requests.get')
+    def test_search_movie_tmdb_special_characters(self, mock_get):
+        """
+        Test search_movie_tmdb with special characters in the movie title,
+        expecting a valid movie ID to be returned.
+        """
+        # Mock a successful response
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = {"results": [{"id": 12345}]}
+
+        movie_id = search_movie_tmdb("!@#$%^&*()", self.TMDB_API_KEY)
+        self.assertEqual(
+            movie_id,
+            12345,
+            "Expected valid movie ID for title with special characters")
+
+    @patch('requests.get')
+    def test_get_movie_reviews_large_number(self, mock_get):
+        """
+        Test get_movie_reviews with a large number of reviews, ensuring the result
+        is limited to the top 5 reviews.
+        """
+        # Mock a response with more than 5 reviews
+        reviews_data = [{"author": f"User{i}", "content": "Great!"} for i in range(10)]
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = {"results": reviews_data}
+
+        reviews = get_movie_reviews(12345, self.TMDB_API_KEY)
+        self.assertEqual(len(reviews), 10, "Expected at most 5 reviews in the results")
 
 
 if __name__ == "__main__":
