@@ -1,13 +1,13 @@
 ## Contributing
 
 [fork]: https://github.com/CSC510-GROUP-40/MovieRecommenderfork
-[pr]: https://github.com/ebanigogia/MovieRecommender/compare
+[pr]: https://github.com/CSC510-GROUP-40/MovieRecommender/compare
 [style]: https://pep8.org/
 [code-of-conduct]: CODE_OF_CONDUCT.md
 
 We're excited that you're interested in contributing to this project! Your support is vital for improving and scaling our **Movie Recommender App**.
 
-If you'd like to contribute and collaborate, please notify us via email at **syepuri@ncsu.edu, chegde@ncsu.edu, or mahamdi@ncsu.edu**.
+If you'd like to contribute and collaborate, please notify us via email at **himohamm@ncsu.edu, larkoh@ncsu.edu, or lliu39@ncsu.edu**.
 
 ### Purpose of Contributing
 
@@ -39,14 +39,14 @@ We also welcome pull requests (PRs). When you submit a PR, one of the repository
 
 1. **Style Checkers**: 
    - Use `pylance` in VS Code for Python.
-   - Use `black` for auto-styling and formatting the code.
+   - Use `PyCodeStyle` and `autopep8` for auto-styling and formatting the code.
    
 2. **Code Style Guidelines**:
    - This project is built using Python (version 3.7). Make sure to add new functionalities in the form of modules.
    - Write self-explanatory variable names and provide comments to help others understand the functionality.
    - Any untested code should be committed under the test folder first. Once successfully tested, the main code can be updated.
    - Follow **PEP 8** guidelines to maintain consistency.
-   - `black` is used as a linter for code formatting.
+   - `autopep8` is used as a linter for code formatting.
 
 ### Code of Conduct
 
