@@ -307,7 +307,7 @@ class PaginationTests(unittest.TestCase):
         self.assertEqual(response.status_code, 401)
         self.client.post('/login', data=dict(username="tester", password="password"))
 
-    @patch('app.db.session.add')
+    @patch('recommenderapp.app.db.session.add')
     @patch('recommenderapp.app.get_movie_info')
     @patch('recommenderapp.app.recommendForNewUser')
     def test_db_add_exception(self, mock_recommend, mock_get_info, mock_db_add):
