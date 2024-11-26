@@ -140,6 +140,35 @@ class MovieDetailsTests(unittest.TestCase):
         self.assertEqual(movie_info['Actors'], 'Leonardo DiCaprio, Joseph Gordon-Levitt')
         self.assertEqual(movie_info['imdbID'], 'tt1375666')
         self.assertEqual(movie_info['Plot'], 'A thief who steals corporate secrets...')
+    
+    @patch('recommenderapp.app.send_request_to_omdb')
+    def test_predict_malformed_omdb_response(self, mock_send_request):
+        """Test that predict route fails gracefully when OMDb returns malformed data."""
+        
+        # Mock send_request_to_omdb to return a malformed response
+        mock_send_request.return_value = {
+            'Title': 'InvalidMovie',
+            'imdbRating': 'N/A',  # Invalid rating
+            'Genre': 'N/A',       # Invalid genre
+            'Poster': 'N/A',      # Invalid poster URL
+            'Actors': None,       # Missing cast information
+            'imdbID': None,       # Missing IMDb ID
+            'Plot': None,         # Missing plot
+            'Response': 'True'    # OMDb claims the response is valid
+        }
+        
+        data = {'movie_list': ['InvalidMovie']}
+        
+        # Make a POST request to the predict route
+        response = self.client.post('/predict', data=json.dumps(data), content_type='application/json')
+        
+        # Assert that the response status code is 200
+        self.assertEqual(response.status_code, 200, "Predict route should handle gracefully for malformed OMDb response.")
+        
+        # Optionally, check that no recommendations were returned
+        response_data = json.loads(response.data)
+        print(response_data)
+        self.assertEqual(len(response_data['recommendations']), 0, "No recommendations should be returned for malformed OMDb response.")
 
     def tearDown(self):
         """
