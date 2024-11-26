@@ -1,9 +1,3 @@
-# Link to demo/walkthrough video:
-
-https://drive.google.com/file/d/1BLah62sXaM-t3jWGpha7uTXTZg4mPlSx/view?usp=sharing
-<br>
-<br>
-
 # <i>Filmfy 🍿</i>
 Your movie night assistant powered by collaborative filtering recommendations!
 
@@ -72,9 +66,9 @@ Filmfy can also be continuously tested with GitHub Actions, keeping our codebase
 
 Get a sneak peek of Filmfy in action! Click the link to watch the demo.
 
-[Watch the animated video here](https://github.com/user-attachments/assets/0363fddc-0874-42bb-8e1b-e38a962394fa)
+[![Watch the animated video here](https://img.youtube.com/vi/ce6-fG9PLKw/hqdefault.jpg)](https://youtu.be/ce6-fG9PLKw)
 
-[Watch the demo video here](https://youtu.be/sNsCvfMRBTI)
+[Watch the demo video here](https://drive.google.com/file/d/1BLah62sXaM-t3jWGpha7uTXTZg4mPlSx/view?usp=sharing)
 
 ## How Filmfy Works 📱
 
@@ -166,12 +160,12 @@ for ssl to work locally on google chrome, you will have to do the following sett
 ![Starting App](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXhqdHRreDQ5NGd2MmY3NjB5dGhlbjNuNWU0MXlib3Q4bXp3eGxzayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2IudUHdI075HL02Pkk/giphy.gif)
 
 ## Documentation 📚
-Check out the [Wiki documentation](https://github.com/CSC510-GROUP-40/MovieRecommenderwiki) for detailed information on how StreamR works and how to contribute.
+Check out the [Wiki documentation](https://github.com/CSC510-GROUP-40/MovieRecommender/wiki) for detailed information on how StreamR works and how to contribute.
 
 
 
 ## Found a Bug? 🐛
-We’d love to hear from you! Please [open an issue](https://github.com/CSC510-GROUP-40/MovieRecommenderissues) if you find any bugs or have feature requests.
+We’d love to hear from you! Please [open an issue](https://github.com/CSC510-GROUP-40/MovieRecommender/issues) if you find any bugs or have feature requests.
 
 ## License 📃
 Filmfy is open-source under the MIT License.
